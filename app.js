@@ -1,8 +1,10 @@
 const express = require("express");
 const app = express();
+const url = require('url');
+const querystring = require('querystring');
 
-app.use(express.json()); // Used to parse JSON bodies
-app.use(express.urlencoded({extended: true, type: "application/x-www-form-urlencoded"})); //Parse URL-encoded bodies
+app.use(express.json());
+app.use(express.urlencoded({extended: true, type: "application/x-www-form-urlencoded"}));
 
 const router = require("./routes/index");
 
