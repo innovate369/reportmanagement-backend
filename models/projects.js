@@ -15,6 +15,8 @@ const projectSchema = new Schema({
     startDate: Date,
     createdOn: { type: Date, default: Date.now },
     image: Buffer,
+    clientCSV: Buffer,
+    csvName: String,
     upload: String
 }, { collection: "projects" });
 

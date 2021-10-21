@@ -5,7 +5,7 @@ const {getAllProjects, getProjectById, addProject, updateProject, deleteProject}
 const { fileStore } = require("../middleware/upload");
 router.get("/", getAllProjects);
 router.get("/:id", getProjectById);
-router.post("/add",fileStore.single("image"), addProject);
+router.post("/add",fileStore.fields([{name: 'image', maxCount: 1}, {name: 'clientCSV', maxCount: 1}]), addProject);
 router.put("/update/:id", updateProject);
 router.delete("/delete/:id", deleteProject);
 

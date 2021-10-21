@@ -1,5 +1,5 @@
 const projects = require("../models/projects");
-
+const { fileStore } = require("../middleware/upload");
 const getAllProjects = async (req, res) => {
     try {
         const allProjects = await projects.find({});
@@ -23,8 +23,9 @@ const getProjectById = async (req, res) => {
 
 const addProject = async (req, res) => {
     try {
-        const { developerId, clientId, technologies, credentials, details, duration, projectName, startDate, image } = req.body;
-        let newProject = { developerId: JSON.parse[developerId], clientId: clientId, technologies: technologies, credentials: credentials, details: details, duration: duration, projectName: projectName, startDate: startDate, image: image, upload: req.file.filename }
+        const { developerId, clientId, technologies, credentials, details, duration, projectName, startDate, image, clientCSV} = req.body;
+        let newProject = { developerId: JSON.parse[developerId], clientId: clientId, technologies: technologies, credentials: credentials, details: details, duration: duration, projectName: projectName, startDate: startDate, image: image,
+             clientCSV: clientCSV, upload: req.files.image[0].filename, csvName:  req.files.clientCSV[0].filename}
         const addproject = await projects.create(newProject);
         res.send({ msg: "New project added succesfully!", data: addproject, status: 200 });
     } catch (e) {
