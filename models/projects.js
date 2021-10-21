@@ -13,9 +13,11 @@ const projectSchema = new Schema({
     duration: String,
     projectName: String,
     startDate: Date,
-    createdOn: {type: Date, default: Date.now}
-   }, {collection: "projects"});
-   
+    createdOn: { type: Date, default: Date.now },
+    image: Buffer,
+    upload: String
+}, { collection: "projects" });
+
 const projects = db.model("projects", projectSchema);
 
 module.exports = projects;

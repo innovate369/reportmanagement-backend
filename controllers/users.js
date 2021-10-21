@@ -1,4 +1,6 @@
+//const { upload } = require("../middleware/upload");
 const Users = require("../models/users");
+
 
 const getAllUsers = async (req, res) => {
     try {
@@ -14,7 +16,6 @@ const getAllUsers = async (req, res) => {
             },
             { userType: type }]
         }).limit(limit).skip(skip).sort('createdOn');
-        console.log(type)
         res.send({ page, size, data: result })
 
     } catch (e) {
@@ -63,6 +64,12 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const fileUpload = (req, res) => {
+        console.log(req.file);
+        res.send("Single FIle upload success");
+      };
+
+  
 module.exports = {
-    getAllUsers, getUserById, addUser, updateUser, deleteUser
+    getAllUsers, getUserById, addUser, updateUser, deleteUser, fileUpload
 };
