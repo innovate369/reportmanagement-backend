@@ -3,11 +3,13 @@ const Clients = require("../models/clients");
 
 const getAllClients = async (req, res) => {
     try {
+        const { page, size = 5} = req.query;
+        const limit = parseInt(size);
+        const skip = (page - 1) * size;
         const search = req.query.search;
         const result = await Clients.find({
-            $or: [{ clientName: { $regex: search, $options: 'i' } }, { projectName: { $regex: search, $options: 'i' } }, { projectDescription: { $regex: search, $options: 'i' } },
-            { projectDetails: { $regex: search, $options: 'i' } }, { clientStatus: { $regex: search, $options: 'i' } }, { feedback: { $regex: search, $options: 'i' } }]
-        });
+            $or: [{ clientName: { $regex: search, $options: 'i' } }, { projectName: { $regex: search, $options: 'i' } }, { projectDescription: { $regex: search, $options: 'i' } },{ projectDetails: { $regex: search, $options: 'i' } }, { clientStatus: { $regex: search, $options: 'i' } }, { feedback: { $regex: search, $options: 'i' } }]
+        }).limit(limit).skip(skip).sort('createdOn');;
         res.send(result)
 
     } catch (e) {
