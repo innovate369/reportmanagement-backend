@@ -1,9 +1,9 @@
 const express = require("express");
 const cors = require('cors');
 const app = express();
+app.set("view engine", "ejs");
+//const url = require('url');
 
-
-const url = require('url');
 const querystring = require('querystring');
 
 app.use(express.json());
@@ -14,8 +14,5 @@ app.use(cors());
 const router = require("./routes/index");
 
 app.use("/api", router);
-
-
-
 
 app.listen(3000, () => console.log('Server running on port 3000!'))
