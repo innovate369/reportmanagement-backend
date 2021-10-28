@@ -1,11 +1,23 @@
-const projects = require("../models/projects");
+const Projects = require("../models/projects");
+const Clients = require("../models/clients");
 const { fileStore } = require("../middleware/upload");
+
+
 const getAllProjects = async (req, res) => {
     try {
-        const allProjects = await projects.find({});
+       const { page, size, search, clientId } = req.query;
+        const limit = parseInt(size);
+        const skip = (page - 1) * size;
+       
+        const allProjects = await Projects.find({
+    
+                $or: [ { details: { $regex: search, $options: 'i' } }, { technologies: { $regex: search, $options: 'i' } },
+                { credentials: { $regex: search, $options: 'i' } }, { duration: { $regex: search, $options: 'i' } }, { projectName: { $regex: search, $options: 'i' } },
+                 { csvName: { $regex: search, $options: 'i' } }, { upload: { $regex: search, $options: 'i' } }]
+        
+            }).populate('clientId developerId').sort({createdOn: -1}).limit(limit).skip(skip);
         res.send({ msg: "Successfully got all Projects!", data: allProjects, status: 200 })
     } catch (e) {
-        console.log(e)
         res.send({ msg: e.message, status: 400 })
     }
 }
@@ -13,7 +25,7 @@ const getAllProjects = async (req, res) => {
 const getProjectById = async (req, res) => {
     try {
         const { id } = req.params;
-        const projectById = await projects.findById(id)
+        const projectById = await Projects.findById(id)
         res.send({ msg: "Successfully got project data", data: projectById, status: 200 })
     } catch (e) {
         console.log(e)
@@ -23,10 +35,13 @@ const getProjectById = async (req, res) => {
 
 const addProject = async (req, res) => {
     try {
-        const { developerId, clientId, technologies, credentials, details, duration, projectName, startDate, image, clientCSV} = req.body;
-        let newProject = { developerId: JSON.parse[developerId], clientId: clientId, technologies: technologies, credentials: credentials, details: details, duration: duration, projectName: projectName, startDate: startDate, image: image,
-             clientCSV: clientCSV, upload: req.files.image[0].filename, csvName:  req.files.clientCSV[0].filename}
-        const addproject = await projects.create(newProject);
+        const { developerId, clientId, technologies, credentials, details, duration, projectName, startDate, image, clientCSV } = req.body;
+        let newProject = {
+            developerId, technologies, clientId: clientId, credentials, details, duration, projectName, startDate, image,
+            clientCSV, upload: req.files.image[0].filename, csvName: req.files.clientCSV[0].filename
+        }
+        const addproject = await Projects.create(newProject);
+        
         res.send({ msg: "New project added succesfully!", data: addproject, status: 200 });
     } catch (e) {
         console.log(e)
@@ -37,7 +52,7 @@ const addProject = async (req, res) => {
 const updateProject = async (req, res) => {
     try {
         const { id } = req.params;
-        const updateById = await projects.findByIdAndUpdate(id, req.body, { runValidator: true, new: true })
+        const updateById = await Projects.findByIdAndUpdate(id, req.body, { runValidator: true, new: true })
         res.send({ msg: "Project data updated succesfully!", data: updateById, status: 200 })
     } catch (e) {
         console.log(e)
@@ -48,7 +63,7 @@ const updateProject = async (req, res) => {
 const deleteProject = async (req, res) => {
     try {
         const { id } = req.params;
-        const deleteById = await projects.findByIdAndDelete(id)
+        const deleteById = await Projects.findByIdAndDelete(id)
         res.send({ msg: "Project deleted successfully!", data: deleteById, status: 200 })
     } catch (e) {
         console.log(e)

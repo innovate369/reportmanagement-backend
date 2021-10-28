@@ -5,8 +5,8 @@ var Schema = mongoose.Schema,
     ObjectId = Schema.ObjectId;
 
 const projectSchema = new Schema({
-    developerId: Array,
-    clientId: ObjectId,
+    developerId: [{type: mongoose.Schema.Types.ObjectId, ref: "Users"}],
+    clientId: {type: mongoose.Schema.Types.ObjectId, ref: "Clients"},
     technologies: Array,
     credentials: String,
     details: String,
@@ -18,8 +18,8 @@ const projectSchema = new Schema({
     clientCSV: Buffer,
     csvName: String,
     upload: String
-}, { collection: "projects" });
+}, { collection: "Projects" });
 
-const projects = db.model("projects", projectSchema);
+const Projects = db.model("Projects", projectSchema);
 
-module.exports = projects;
+module.exports = Projects;

@@ -5,6 +5,7 @@ var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const userSchema = new mongoose.Schema({
     userType: String,
+    projectId: {type: mongoose.Schema.Types.ObjectId, ref: "Projects"},
     firstName: String,
     lastName: String,
     email: String,
@@ -17,6 +18,7 @@ const userSchema = new mongoose.Schema({
 
 
 const Users = db.model("Users", userSchema);
+
 userSchema.plugin(aggregatePaginate);
 
 module.exports = Users;

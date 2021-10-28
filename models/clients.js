@@ -4,12 +4,17 @@ const db = require("../config/db")
 var aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 
 const clientSchema = new mongoose.Schema({
-    clientName: String,
-    projectName: String,
-    projectDescription: String,
-    projectDetails: String,
-    clientStatus: String,
-    feedback: String,
+    businessCategory: String,
+    projectId: {type: mongoose.Schema.Types.ObjectId, ref: "Projects"},
+    companyName: String,
+    ledgerName: String,
+    mobileNum: String,
+    contactNum: String,
+    address: String,
+    countryName: String,
+    stateName: String,
+    cityName: String,
+    pinCode: String,
     createdOn: {type: Date, default: Date.now}
    }, {collection: "Clients"});
 
