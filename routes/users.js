@@ -6,15 +6,16 @@ const checkWhiteList = require("../middleware/check");
 
 const { fileStore } = require("../middleware/upload");
 const {getAllUsers, getUserById, addUser, updateUser, deleteUser, fileUpload, regUser, userLogin} = require("../controllers/users");
+const {checkAddUser, checkLoginUser, validate} = require("../middleware/fieldValidator");
 
 router.get("/", checkWhiteList, getAllUsers);
 router.get("/:id", getUserById);
-router.post("/add", addUser);
-router.put("/update/:id", updateUser);
+router.post("/add", checkAddUser, validate, addUser);
+router.put("/update/:id",checkAddUser, validate, updateUser);
 router.delete("/delete/:id", deleteUser);
 router.post("/upload", fileStore.single("image"), fileUpload);
-router.post("/register", regUser);
-router.post("/login", userLogin)
+router.post("/register", checkAddUser, validate, regUser);
+router.post("/login", checkLoginUser, validate, userLogin)
 
 
 module.exports = router;

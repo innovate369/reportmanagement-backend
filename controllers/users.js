@@ -36,32 +36,22 @@ const getUserById = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-    try {
         const { userType, email, password, userName, phoneNumber, address, firstName, lastName } = req.body;
         let newUser = { userType, email, password, userName, phoneNumber, address, firstName, lastName }
         const addUser = await Users.create(newUser);
         res.send({ msg: "New user added successfully!", data: addUser, status: 200 });
-    } catch (e) {
-        res.send({ msg: e.message, status: 400 })
-    }
-}
+    } 
 
 const regUser = async (req, res) => {
-    try {
         const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
         const { userType, email, userName, phoneNumber, address, firstName, lastName } = req.body;
         let regUser = { userType, email, password: hashedPwd, userName, phoneNumber, address, firstName, lastName }
         const insertResult = await Users.create(regUser);
         res.send({ msg: insertResult, status: 200 });
-    } catch (error) {
-        console.log(error);
-        res.send({ msg: e.message, status: 400 });
     }
-};
 
 const userLogin = async (req, res) => {
-    try {
-        const user = await Users.findOne({ userName: req.body.userName });
+        const user = await Users.findOne({$or: [{ userName: req.body.userName }, {email: req.body.email}]});
         if (user) {
             const cmp = await bcrypt.compare(req.body.password, user.password);
             if (cmp) {
@@ -73,20 +63,12 @@ const userLogin = async (req, res) => {
                 res.send({ msg: "Wrong username or password." });
             }
         }
-    } catch (error) {
-        res.send({ msg: e.message, status: 400 });
-    }
-};
-
+    } 
 const updateUser = async (req, res) => {
-    try {
         const { id } = req.params;
         const updateById = await Users.findByIdAndUpdate(id, req.body, { runValidator: true, new: true })
         res.send({ msg: "User updated succesfully!", data: updateById, status: 200 })
-    } catch (e) {
-        res.send({ msg: e.message, status: 400 })
-    }
-}
+    } 
 
 const deleteUser = async (req, res) => {
     try {
