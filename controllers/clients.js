@@ -17,15 +17,11 @@ const getAllClients = async (req, res) => {
 }
 
 const addClient = async (req, res) => {
-    try {
         const { businessCategory, companyName, ledgerName, mobileNum, contactNum, address, countryName, stateName, cityName, pinCode, projectId } = req.body;
         let newClient = { businessCategory, companyName, ledgerName, mobileNum, contactNum, address, countryName, stateName, cityName, pinCode, projectId }
         const addClient = await Clients.create(newClient);
         res.send({ msg: "New Client added succesfully!", data: addClient, status: 200 });
-    } catch (e) {
-        res.send({ msg: e.message, status: 400 })
-    }
-}
+    } 
 
 const deleteClient = async (req, res) => {
     try {
