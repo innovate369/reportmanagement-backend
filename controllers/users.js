@@ -36,8 +36,9 @@ const getUserById = async (req, res) => {
 }
 
 const addUser = async (req, res) => {
-        const { userType, email, password, userName, phoneNumber, address, firstName, lastName } = req.body;
-        let newUser = { userType, email, password, userName, phoneNumber, address, firstName, lastName }
+        const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
+        const { userType, email, userName, phoneNumber, address, firstName, lastName } = req.body;
+        let newUser = { userType, email, password: hashedPwd, userName, phoneNumber, address, firstName, lastName }
         const addUser = await Users.create(newUser);
         res.send({ msg: "New user added successfully!", data: addUser, status: 200 });
     } 
@@ -51,11 +52,10 @@ const regUser = async (req, res) => {
     }
 
 const userLogin = async (req, res) => {
-        const user = await Users.findOne({$or: [{ userName: req.body.userName }, {email: req.body.email}]});
+        const user = await Users.findOne({ userName: req.body.userName });
         if (user) {
             const cmp = await bcrypt.compare(req.body.password, user.password);
             if (cmp) {
-              
                     const projectList = await Projects.find({})
                     res.send({ msg: "Authentication Successful", data: projectList, status: 200 });
                 
@@ -80,11 +80,22 @@ const deleteUser = async (req, res) => {
     }
 }
 
+const bindProject = async (req, res) => {
+    try {
+        const {userId} = req.query;
+        const {newProjectId} = req.body;
+        const bindingUser = await Users.findByIdAndUpdate(userId, {projectId: newProjectId}, { runValidator: true, new: true }) 
+        res.send({ msg: "User linked with new project!", data: bindingUser, status: 200 });
+    } catch (error) {
+        res.send({ msg: error.message, status: 400 });
+    }
+}
+
 const fileUpload = (req, res) => {
     console.log(req.file);
     res.send("Single FIle upload success");
 };
 
 module.exports = {
-    getAllUsers, getUserById, addUser, updateUser, deleteUser, fileUpload, regUser, userLogin
+    getAllUsers, getUserById, addUser, updateUser, deleteUser, fileUpload, regUser, userLogin, bindProject
 };

@@ -50,8 +50,8 @@ const checkAddClient = [
     check('companyName').notEmpty().withMessage('add company name'),
     check('ledgerName').notEmpty().withMessage('add ledgername'),
     
-    check('mobileNumber').trim().isNumeric().withMessage('mobile number must be numeric.'),
-    check('mobileNumber').bail().isLength({ max: 15, min: 10 }).withMessage('mobile number must be at least 10 digits long.').bail(),
+    check('mobileNum').trim().isNumeric().withMessage('mobile number must be numeric.'),
+    check('mobileNum').bail().isLength({ max: 15, min: 10 }).withMessage('mobile number must be at least 10 digits long.').bail(),
 
     check('contactNum').trim().isNumeric().withMessage('contact number must be numeric.'),
     check('contactNum').bail().isLength({ max: 12, min: 7 }).withMessage('contact number must be at least 10 digits long.').bail(),
@@ -70,7 +70,9 @@ const checkAddClient = [
     check('pinCode').trim().isNumeric().withMessage('pincode must be numeric.'),
 ]
 
-
+const checkBindDeveloper = [
+    check('newDeveloper').notEmpty().withMessage('add developerId')
+]
 
 const validate = (req, res, next) => {
     const errors = validationResult(req)
@@ -90,5 +92,6 @@ module.exports = {
     checkAddUser,
     checkLoginUser,
     checkAddProject,
-    checkAddClient
+    checkAddClient,
+    checkBindDeveloper
 };

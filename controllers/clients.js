@@ -35,13 +35,10 @@ const deleteClient = async (req, res) => {
 
 const clientInvoice = async(req, res) => {
     try{
-        const numWeeks = req.query.numWeeks;
-        const user = await Clients.findOne({ clientName: req.body.firstName }); 
-        const numDays = 5;
-        const dayHours = 8;
-        const hourRate = 10
+        const user = await Clients.findOne({ clientId: req.query.clientId }); 
         if (user) {
             user.payment = numWeeks*numDays*dayHours*hourRate;
+            console.log(typeof(numDays))
             res.send(user.payment)
         }
     } catch {

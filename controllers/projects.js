@@ -1,6 +1,7 @@
 const Projects = require("../models/projects");
 const Clients = require("../models/clients");
 const { fileStore } = require("../middleware/upload");
+const Users = require("../models/users");
 
 
 const getAllProjects = async (req, res) => {
@@ -70,6 +71,14 @@ const deleteProject = async (req, res) => {
     }
 }
 
+const bindDeveloper = async (req, res) => {
+    const {projectId} = req.query;
+    const {newDeveloper} = req.body
+
+    const addDeveloper = await Projects.findByIdAndUpdate(projectId, { $push: { developerId: {$each : newDeveloper } }})
+    res.send({ msg: "new developers linked successfully", data: addDeveloper, status: 200 })
+}
+
 module.exports = {
-    getAllProjects, getProjectById, addProject, updateProject, deleteProject
+    getAllProjects, getProjectById, addProject, updateProject, deleteProject, bindDeveloper
 };
