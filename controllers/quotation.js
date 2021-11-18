@@ -31,10 +31,10 @@ const getQuotation = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   const {
-    clientId, invoiceBy, invoiceAmount, invoiceType, cGST, iGST, sGST
+    clientId, invoiceBy, invoiceAmount, invoiceType, quotationDate, cGST, iGST, sGST
   } = req.body;
   const newQuotation = {
-    clientId, invoiceBy, invoiceAmount, invoiceType, cGST, iGST, sGST
+    clientId, invoiceBy, invoiceAmount, invoiceType, quotationDate, cGST, iGST, sGST
   };
   const addNewQuotation = await Quotation.create(newQuotation);
   res.send({ msg: 'Quotation added successfully!', data: addNewQuotation, status: 200 });

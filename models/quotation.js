@@ -18,7 +18,7 @@ const quotationSchema = new mongoose.Schema({
   cGST: {type: Number, default: 9},
   sGST: {type: Number, default: 9},
   iGST: {type: Number, default: 18},
-  invoiceDate: { type: Date, default: Date.now },
+  quotationDate: { type: Date, default: Date.now },
   invoiceBy: String,
   invoiceAmount: Number,
   invoiceType: String
