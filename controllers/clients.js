@@ -8,7 +8,8 @@ const getAllClients = async (req, res) => {
     const { search } = req.query;
     const result = await Clients.find({
       $or: [{ businessCategory: { $regex: search, $options: 'i' } }, { companyName: { $regex: search, $options: 'i' } },
-      { ledgerName: { $regex: search, $options: 'i' } }],
+      { ledgerName: { $regex: search, $options: 'i' } }, { ownerName: { $regex: search, $options: 'i' } },
+      { contactPerson: { $regex: search, $options: 'i' } }, { email: { $regex: search, $options: 'i' } }],
     }).limit(limit).skip(skip).sort('createdOn');
     res.send({ msg: 'Got all Clients succuessfully!', data: result, status: 200 });
   } catch (e) {
@@ -16,10 +17,29 @@ const getAllClients = async (req, res) => {
   }
 };
 
+const clientData = async (req, res) => {
+  try {
+    const clients = await Clients.find();
+    res.send({ msg: 'Got all Clients succuessfully!', data: clients, status: 200 });
+  } catch (e) {
+    res.send({ msg: e.message, status: 400 });
+  }
+}
+
+const getClientById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const clientById = await Clients.findById(id).populate('projectId');
+    res.send({ msg: 'Successfully got client data', data: clientById, status: 200 });
+  } catch (e) {
+    res.send({ msg: e.message, status: 400 });
+  }
+};
+
 const addClient = async (req, res) => {
   const {
-    businessCategory, companyName, ledgerName, mobileNum, contactNum,
-    address, countryName, stateName, cityName, pinCode, projectId,
+    businessCategory, companyName, ownerName, ledgerName, ledgerCode, contactPerson, gstNum, mobileNum, contactNum,
+    address, email, countryName, stateName, cityName, pinCode, projectId,
   } = req.body;
   const newClient = {
     businessCategory,
@@ -33,6 +53,12 @@ const addClient = async (req, res) => {
     cityName,
     pinCode,
     projectId,
+    ownerName,
+    ledgerCode,
+    contactPerson,
+    gstNum,
+    address,
+    email
   };
   const addNewClient = await Clients.create(newClient);
   res.send({ msg: 'New Client added succesfully!', data: addNewClient, status: 200 });
@@ -79,5 +105,5 @@ const bindProject = async (req, res) => {
 };
 
 module.exports = {
-  getAllClients, addClient, deleteClient, clientInvoice, bindProject,
+  getAllClients, addClient, deleteClient, clientInvoice, bindProject, getClientById, clientData
 };

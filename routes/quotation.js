@@ -1,13 +1,18 @@
-const express = require("express");
+const express = require('express');
+
 const router = express.Router();
-const checkWhiteList = require("../middleware/check");
+const checkWhiteList = require('../middleware/check');
 
-const { getQuotation, addQuotation, addProject, deleteQuotation } = require("../controllers/quotation");
-//const { checkAddQuotation, validate } = require("../middleware/fieldValidator");
+const {
+  getQuotation, addQuotation, addTask, deleteQuotation, getAllQuotations, updateProject
+} = require('../controllers/quotation');
+// const { checkAddQuotation, validate } = require("../middleware/fieldValidator");
 
-router.get("/", checkWhiteList, getQuotation);
-router.post("/add", addQuotation)
-router.put("/addProject", addProject)
-router.delete("/delete/:id", deleteQuotation)
+router.get('/', checkWhiteList, getAllQuotations);
+router.get('/quotationsByClient', checkWhiteList, getQuotation);
+router.post('/add', addQuotation);
+router.put('/addTask', addTask);
+router.put('/update', updateProject);
+router.delete('/delete/:id', deleteQuotation);
 
 module.exports = router;
