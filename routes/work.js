@@ -4,7 +4,7 @@ const router = express.Router();
 //const checkWhiteList = require('../middleware/check');
 
 const {
-     addWork,
+    addWork,
     getWorkWithClientId,
     getAllWorks,
     addNewWork
@@ -13,7 +13,7 @@ const {
 
 router.get('/', getAllWorks);
 router.get('/workWithClientId',getWorkWithClientId);
-router.post('/add', addWork);
+router.put('/add', addWork);
 router.put('/addNewWork', addNewWork);
 //router.delete('/delete/:id', deleteWork);
 

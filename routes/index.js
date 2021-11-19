@@ -6,7 +6,7 @@ const projects = require('./projects');
 const clients = require('./clients');
 const dashboard = require('./dashboard');
 const quotation = require('./quotation');
-const Works = require('../models/work');
+const Works = require('./work');
 
 router.use('/users', users);
 router.use('/projects', projects);
