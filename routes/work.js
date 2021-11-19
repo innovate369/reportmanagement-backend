@@ -5,17 +5,19 @@ const router = express.Router();
 
 const {
     addWork,
-    getWorkWithClientId,
+    //getWorkWithClientId,
     getAllWorks,
-    addNewWork
+    //addNewWork,
+    updateWork,
+    deleteWork
  
 } = require('../controllers/work');
 
 router.get('/', getAllWorks);
-router.get('/workWithClientId',getWorkWithClientId);
+//router.get('/workWithClientId',getWorkWithClientId);
 router.put('/add', addWork);
-router.put('/addNewWork', addNewWork);
-//router.delete('/delete/:id', deleteWork);
+router.put('/update', updateWork);
+router.delete('/delete/:id', deleteWork);
 
 
 module.exports = router;
