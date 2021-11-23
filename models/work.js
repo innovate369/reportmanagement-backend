@@ -1,19 +1,19 @@
-const mongoose = require('mongoose');
-const db = require('../config/db');
+const mongoose = require('mongoose')
+const db = require('../config/db')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const workSchema = new Schema({
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients' },
-//  task: [{
-    workDescription: String,
-    developmentTime: String,
-    developmentCost: Number,
-    deliveryDate: { type: Date, default: Date.now },
-    withExtra: String,
- // }]
-}, { collection: 'Works' });
+  //  task: [{
+  workDescription: String,
+  developmentTime: String,
+  developmentCost: Number,
+  deliveryDate: { type: Date, default: Date.now },
+  withExtra: String
+  // }]
+}, { collection: 'Works' })
 
-const Works = db.model('Works', workSchema);
+const Works = db.model('Works', workSchema)
 
-module.exports = Works;
+module.exports = Works

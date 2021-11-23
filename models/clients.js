@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
-const db = require('../config/db');
+const mongoose = require('mongoose')
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
+const db = require('../config/db')
 
 const clientSchema = new mongoose.Schema({
   businessCategory: String,
   projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Projects' },
+  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
   companyName: String,
   ownerName: String,
   contactPerson: String,
@@ -19,10 +20,10 @@ const clientSchema = new mongoose.Schema({
   stateName: String,
   cityName: String,
   pinCode: String,
-  createdOn: { type: Date, default: Date.now },
-}, { collection: 'Clients' });
+  createdOn: { type: Date, default: Date.now }
+}, { collection: 'Clients' })
 
-const Clients = db.model('Clients', clientSchema);
-clientSchema.plugin(aggregatePaginate);
+const Clients = db.model('Clients', clientSchema)
+clientSchema.plugin(aggregatePaginate)
 
-module.exports = Clients;
+module.exports = Clients

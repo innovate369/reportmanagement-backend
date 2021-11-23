@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
-const db = require('../config/db');
+const mongoose = require('mongoose')
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
+const db = require('../config/db')
 
 const userSchema = new mongoose.Schema({
   userType: String,
@@ -13,10 +13,10 @@ const userSchema = new mongoose.Schema({
   phoneNumber: String,
   address: String,
   createdOn: { type: Date, default: Date.now }
-}, { collection: 'Users' });
+}, { collection: 'Users' })
 
-const Users = db.model('Users', userSchema);
+const Users = db.model('Users', userSchema)
 
-userSchema.plugin(aggregatePaginate);
+userSchema.plugin(aggregatePaginate)
 
-module.exports = Users;
+module.exports = Users

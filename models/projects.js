@@ -1,10 +1,11 @@
-const mongoose = require('mongoose');
-const db = require('../config/db');
+const mongoose = require('mongoose')
+const db = require('../config/db')
 
-const { Schema } = mongoose;
+const { Schema } = mongoose
 
 const projectSchema = new Schema({
   developerId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
+  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients' },
   technologies: Array,
   credentials: String,
@@ -16,9 +17,9 @@ const projectSchema = new Schema({
   image: Buffer,
   clientCSV: Buffer,
   csvName: String,
-  upload: String,
-}, { collection: 'Projects' });
+  upload: String
+}, { collection: 'Projects' })
 
-const Projects = db.model('Projects', projectSchema);
+const Projects = db.model('Projects', projectSchema)
 
-module.exports = Projects;
+module.exports = Projects

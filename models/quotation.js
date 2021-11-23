@@ -1,32 +1,23 @@
-const mongoose = require('mongoose');
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
-const db = require('../config/db');
-
-// var Schema = mongoose.Schema,
-//     ObjectId = Schema.ObjectId;
+const mongoose = require('mongoose')
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
+const db = require('../config/db')
 
 const quotationSchema = new mongoose.Schema({
-  task: [{
-    workDescription: String,
-    developmentTime: String,
-    developmentCost: Number,
-    deliveryDate: { type: Date, default: Date.now },
-    withExtra: String,
-  }],
-  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients'},
-  subCost: String,
-  cGST: {type: Number, default: 9},
-  sGST: {type: Number, default: 9},
-  iGST: {type: Number, default: 18},
+  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
+  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients' },
+  projectId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Projects' }],
+  subCost: Number,
+  cGST: Number,
+  sGST: Number,
+  iGST: Number,
   quotationDate: { type: Date, default: Date.now },
   invoiceBy: String,
   invoiceAmount: Number,
   invoiceType: String
-}, { collection: 'Quotation' });
+}, { collection: 'Quotation' })
 
-const Quotation = db.model('Quotation', quotationSchema);
+const Quotation = db.model('Quotation', quotationSchema)
 
+quotationSchema.plugin(aggregatePaginate)
 
-quotationSchema.plugin(aggregatePaginate);
-
-module.exports = Quotation;
+module.exports = Quotation

@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require('express-validator')
 
 const checkAddUser = [
 
@@ -23,9 +23,9 @@ const checkAddUser = [
   check('phoneNumber').bail().isLength({ max: 12, min: 10 }).withMessage('phone number must be at least 10 digits long.')
     .bail(),
 
-  check('address').notEmpty().withMessage('address is required'),
+  check('address').notEmpty().withMessage('address is required')
 
-];
+]
 
 const checkLoginUser = [
 
@@ -33,17 +33,17 @@ const checkLoginUser = [
   check('userName').not().custom((val) => /[^A-za-z0-9\s]/g.test(val)).withMessage('userName can not use unique characters'),
 
   check('password').notEmpty().withMessage('password is required'),
-  check('password').isLength({ min: 8 }).withMessage('password must be at least 8 characters'),
+  check('password').isLength({ min: 8 }).withMessage('password must be at least 8 characters')
 
-];
+]
 
 const checkAddProject = [
   check('technologies').notEmpty().withMessage('Add required technologies'),
   check('credentials').notEmpty().withMessage('Add credentials of the project'),
   check('details').notEmpty().withMessage('Add project details'),
   check('duration').notEmpty().withMessage('Add project duration'),
-  check('projectName').notEmpty().withMessage('Add project name'),
-];
+  check('projectName').notEmpty().withMessage('Add project name')
+]
 
 const checkAddClient = [
 
@@ -51,7 +51,6 @@ const checkAddClient = [
   check('companyName').notEmpty().withMessage('add company name'),
   check('ledgerName').notEmpty().withMessage('add ledger name'),
   check('ledgerCode').notEmpty().withMessage('add ledger code'),
-
 
   check('mobileNum').trim().isNumeric().withMessage('mobile number must be numeric.'),
   check('mobileNum').bail().isLength({ max: 15, min: 10 }).withMessage('mobile number must be at least 10 digits long.')
@@ -72,25 +71,25 @@ const checkAddClient = [
   check('cityName').notEmpty().withMessage('add city name'),
   check('cityName').not().custom((val) => /[^a-zA-Z]/gi.test(val)).withMessage('city name cannot include unique character'),
 
-  check('pinCode').trim().isNumeric().withMessage('pincode must be numeric.'),
-];
+  check('pinCode').trim().isNumeric().withMessage('pincode must be numeric.')
+]
 
 const checkBindDeveloper = [
-  check('newDeveloper').notEmpty().withMessage('add developerId'),
-];
+  check('newDeveloper').notEmpty().withMessage('add developerId')
+]
 
 const validate = (req, res, next) => {
-  const errors = validationResult(req);
+  const errors = validationResult(req)
   if (errors.isEmpty()) {
-    return next();
+    return next()
   }
-  const extractedErrors = [];
-  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }));
+  const extractedErrors = []
+  errors.array().map((err) => extractedErrors.push({ [err.param]: err.msg }))
 
   return res.status(422).json({
-    errors: extractedErrors,
-  });
-};
+    errors: extractedErrors
+  })
+}
 
 module.exports = {
   validate,
@@ -98,5 +97,5 @@ module.exports = {
   checkLoginUser,
   checkAddProject,
   checkAddClient,
-  checkBindDeveloper,
-};
+  checkBindDeveloper
+}
