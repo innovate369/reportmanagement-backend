@@ -76,8 +76,9 @@ const addProject = async (req, res) => {
     csvName: req.files.clientCSV[0].filename
   }
   const addproject = await Projects.create(newProject)
-  console.log(addProject._id)
-  // const addProjectToClient = await Clients.findByIdAndUpdate(clientId, { $push: { projectId: 'addProject._id' } })
+  const addedProject = await Projects.findOne({ clientId: clientId })
+  const id = addedProject._id
+  const addProjectToClient = await Clients.findByIdAndUpdate(clientId, { $push: { projects: id } })
 
   res.send({ msg: 'New project added succesfully!', data: addproject, status: 200 })
 }
@@ -92,10 +93,30 @@ const updateProject = async (req, res) => {
   res.send({ msg: 'Project data updated succesfully!', data: updateById, status: 200 })
 }
 
+const addTask = async (req, res) => {
+  const { projectId } = req.query
+  const { workId } = req.body
+
+  const addNewWork = await Projects.findByIdAndUpdate(
+    { projectId },
+    {
+      $push: {
+        workId: workId
+      }
+    }
+  )
+
+  // const addWorkToProject = await Projects.findOneAndUpdate({ clientId: clientId }, { $push: { workId: workId } })
+  // const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId } })
+
+  res.send({ msg: 'Worked added to project successfully!', data: addNewWork, status: 200 })
+}
+
 const deleteProject = async (req, res) => {
   try {
     const { id } = req.params
     const deleteById = await Projects.findByIdAndDelete(id)
+    const deleteFromClient = await Clients.findOneAndUpdate({ 'projects._id': id }, { $pull: { projects: id } })
     res.send({ msg: 'Project deleted successfully!', data: deleteById, status: 200 })
   } catch (e) {
     res.send({ msg: e.message, status: 400 })
@@ -119,5 +140,6 @@ module.exports = {
   addProject,
   updateProject,
   deleteProject,
-  bindDeveloper
+  bindDeveloper,
+  addTask
 }

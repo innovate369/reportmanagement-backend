@@ -4,8 +4,8 @@ const db = require('../config/db')
 
 const clientSchema = new mongoose.Schema({
   businessCategory: String,
-  projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Projects' },
-  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
+  projects: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Projects' }],
+  // workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
   companyName: String,
   ownerName: String,
   contactPerson: String,

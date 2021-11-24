@@ -4,7 +4,7 @@ const db = require('../config/db')
 const { Schema } = mongoose
 
 const workSchema = new Schema({
-  clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients' },
+  projectId: { type: mongoose.Schema.Types.ObjectId, ref: 'Projects' },
   //  task: [{
   workDescription: String,
   developmentTime: String,

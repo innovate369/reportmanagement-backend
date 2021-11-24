@@ -4,7 +4,8 @@ const { update } = require('../models/quotation')
 const Quotation = require('../models/quotation')
 const Projects = require('../models/projects')
 
-const getAllQuotations = async (req, res) => {
+// eslint-disable-next-line no-multi-spaces
+const getAllQuotations = async (req, res) => {                                                  // add search functionality
   try {
     const result = await Quotation.find({}).populate('clientId')
     res.send({ msg: 'Got all Quotations successfully!', data: result, status: 200 })
@@ -41,16 +42,16 @@ const getQuotation = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   const {
-    clientId, invoiceBy, invoiceType, quotationDate, workId, cGST, sGST, iGST, invoiceAmount, subCost, projectId
+    clientId, invoiceBy, invoiceType, quotationDate, workId, cGST, sGST, iGST, invoiceAmount, subCost, project
   } = req.body
   const newQuotation = {
-    clientId, invoiceBy, invoiceType, quotationDate, cGST, sGST, iGST, invoiceAmount, subCost, workId, projectId
+    clientId, invoiceBy, invoiceType, quotationDate, cGST, sGST, iGST, invoiceAmount, subCost, workId, project
   }
   const addNewQuotation = await Quotation.create(newQuotation)
 
-  const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId, 'projectId.workId': workId } })
+  const addWorkToProject = await Projects.findByIdAndUpdate(project, { $push: { workId: workId } })
 
-  const addWorkToProject = await Projects.findOneAndUpdate({ clientId: clientId }, { $push: { workId: workId } })
+  // const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId, 'projectId.workId': workId } })
 
   // const pushDetails = await Quotation.findByIdAndUpdate(addNewQuotation._id, { $push: { workId: workId } })
   // const updatedQuotaion = await Quotation.findById(addNewQuotation._id)
@@ -80,23 +81,6 @@ const addQuotation = async (req, res) => {
   res.send({ msg: 'Quotation added successfully!', data: addNewQuotation, status: 200 })
 }
 
-const addTask = async (req, res) => {
-  const { clientId } = req.query
-  const { workId } = req.body
-
-  const addNewProject = await Quotation.findOneAndUpdate(
-    { clientId: clientId },
-    {
-      $push: {
-        workId: workId
-      }
-    }
-  )
-  const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId, 'projectId.workId': workId } })
-  const addWorkToProject = await Projects.findOneAndUpdate({ clientId: clientId }, { $push: { workId: workId } })
-  res.send({ msg: 'Project added successfully!', data: addNewProject, status: 200 })
-}
-
 const updateProject = async (req, res) => {
   try {
     const { workId } = req.query
@@ -124,7 +108,6 @@ module.exports = {
   getAllQuotations,
   getQuotation,
   addQuotation,
-  addTask,
   deleteQuotation,
   updateProject
 }

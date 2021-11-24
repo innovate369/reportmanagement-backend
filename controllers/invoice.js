@@ -1,6 +1,7 @@
 const Invoice = require('../models/invoice')
 
-const getAllInvoices = async (req, res) => {
+// eslint-disable-next-line no-multi-spaces
+const getAllInvoices = async (req, res) => {                                                // add search functionality
   try {
     const getInvoices = await Invoice.find()
     res.send({ msg: 'Got all Invoices successfully!', data: getInvoices, status: 200 })

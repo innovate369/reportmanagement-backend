@@ -19,7 +19,7 @@ const getAllClients = async (req, res) => {
 
 const clientData = async (req, res) => {
   try {
-    const clients = await Clients.find()
+    const clients = await Clients.find().populate('projects')
     res.send({ msg: 'Got all Clients succuessfully!', data: clients, status: 200 })
   } catch (e) {
     res.send({ msg: e.message, status: 400 })

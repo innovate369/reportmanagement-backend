@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 const {
-  getAllProjects, getProjectById, addProject, updateProject, deleteProject, bindDeveloper
+  getAllProjects, getProjectById, addProject, updateProject, deleteProject, bindDeveloper, addTask
 } = require('../controllers/projects')
 const { fileStore } = require('../middleware/upload')
 const { checkAddProject, validate, checkBindDeveloper } = require('../middleware/fieldValidator')
@@ -14,5 +14,6 @@ router.post('/add', fileStore.fields([{ name: 'image', maxCount: 1 }, { name: 'c
 router.put('/update/:id', checkAddProject, validate, updateProject)
 router.delete('/delete/:id', deleteProject)
 router.put('/bindDeveloper', checkBindDeveloper, validate, bindDeveloper)
+router.put('/addTask', addTask)
 
 module.exports = router
