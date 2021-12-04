@@ -115,8 +115,7 @@ const addQuotation = async (req, res) => {
     invoiceAmount,
     subCost,
     project,
-    projectName,
-    invoiceNum
+    projectName
   } = req.body;
   const newQuotation = {
     clientId,
@@ -131,7 +130,7 @@ const addQuotation = async (req, res) => {
     workId,
     project,
     projectName,
-    invoiceNum
+    invoiceNum: Math.random().toString(36).slice(2)
   };
   const addNewQuotation = await Quotation.create(newQuotation);
 
