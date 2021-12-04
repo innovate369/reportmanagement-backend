@@ -3,6 +3,7 @@ const Clients = require("../models/clients");
 const { update } = require("../models/quotation");
 const Quotation = require("../models/quotation");
 const Projects = require("../models/projects");
+const Works = require('../models/work');
 
 // eslint-disable-next-line no-multi-spaces
 // const getAllQuotations = async (req, res) => {
@@ -137,6 +138,12 @@ const addQuotation = async (req, res) => {
   const addWorkToProject = await Projects.findByIdAndUpdate(project, {
     $push: { workId: workId },
   });
+
+  const updateWork = await Works.updateMany(
+    { _id: { $in: workId } },
+    { $set: { isNewWork: false } },
+    { multi: true }
+  )
 
   // const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId, 'projectId.workId': workId } })
 
