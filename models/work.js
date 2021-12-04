@@ -12,6 +12,10 @@ const workSchema = new Schema(
     developmentCost: Number,
     deliveryDate: { type: Date, default: Date.now },
     withExtra: String,
+    isNewWork: {
+      type: Boolean,
+      default: true
+    }
     // }]
   },
   { collection: "Works" }
