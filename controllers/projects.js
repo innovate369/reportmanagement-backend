@@ -57,8 +57,8 @@ const addProject = async (req, res) => {
     duration,
     projectName,
     startDate,
-    image,
-    clientCSV
+    // image,
+    // clientCSV
   } = req.body
 
   const newProject = {
@@ -70,15 +70,15 @@ const addProject = async (req, res) => {
     duration,
     projectName,
     startDate,
-    image,
-    clientCSV,
-    upload: req.files.image[0].filename,
-    csvName: req.files.clientCSV[0].filename
+    // image,
+    // clientCSV,
+    // upload: req.files.image[0].filename,
+    // csvName: req.files.clientCSV[0].filename
   }
   const addproject = await Projects.create(newProject)
-  const addedProject = await Projects.findOne({ clientId: clientId })
-  const id = addedProject._id
-  const addProjectToClient = await Clients.findByIdAndUpdate(clientId, { $push: { projects: id } })
+  console.log(addproject._id)
+  // const addedProject = await Projects.findOne({ _id: addProject._id })
+  const addProjectToClient = await Clients.findByIdAndUpdate(clientId, { $push: { projects: { _id: addproject._id } } })
 
   res.send({ msg: 'New project added succesfully!', data: addproject, status: 200 })
 }
@@ -116,7 +116,8 @@ const deleteProject = async (req, res) => {
   try {
     const { id } = req.params
     const deleteById = await Projects.findByIdAndDelete(id)
-    const deleteFromClient = await Clients.findOneAndUpdate({ 'projects._id': id }, { $pull: { projects: id } })
+    console.log(id)
+    const deleteFromClient = await Clients.findOneAndUpdate({ 'projects._id': id }, { $pull: { projects: { _id: id } } })
     res.send({ msg: 'Project deleted successfully!', data: deleteById, status: 200 })
   } catch (e) {
     res.send({ msg: e.message, status: 400 })
@@ -134,6 +135,16 @@ const bindDeveloper = async (req, res) => {
   res.send({ msg: 'new developers linked successfully', data: addDeveloper, status: 200 })
 }
 
+const getProjectsByClientId = async (req, res) => {
+  try {
+    const { id } = req.params
+    const projects = await Projects.find({ id })
+    res.send({ msg: 'got projects for clientId!', data: projects, status: 200 })
+  } catch (error) {
+    res.send({ msg: error.message, status: 400 })
+  }
+}
+
 module.exports = {
   getAllProjects,
   getProjectById,
@@ -141,5 +152,6 @@ module.exports = {
   updateProject,
   deleteProject,
   bindDeveloper,
-  addTask
+  addTask,
+  getProjectsByClientId
 }

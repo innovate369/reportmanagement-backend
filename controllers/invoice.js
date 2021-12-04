@@ -1,7 +1,7 @@
 const Invoice = require('../models/invoice')
+const Works = require('../models/work')
 
-// eslint-disable-next-line no-multi-spaces
-const getAllInvoices = async (req, res) => {                                                // add search functionality
+const getAllInvoices = async (req, res) => {
   try {
     const getInvoices = await Invoice.find()
     res.send({ msg: 'Got all Invoices successfully!', data: getInvoices, status: 200 })
@@ -10,10 +10,35 @@ const getAllInvoices = async (req, res) => {                                    
   }
 }
 
+const addWork = async (req, res) => {
+  try {
+    const { clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost } = req.body
+    const newWork = {
+      clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost
+    }
+    const workDetails = await Works.create(newWork)
+    // const obj = JSON.parse(JSON.stringify(workDetails))
+
+    // obj["task"].push({
+    //     workDescription: workDescription, deliveryDate: deliveryDate, withExtra: withExtra, developmentTime: developmentTime,
+    //     developmentCost: developmentCost
+    // });
+
+    // const pushDetails = await Works.findByIdAndUpdate(workDetails._id, {$push : { "task":
+    //    { "workDescription": workDescription, deliveryDate: deliveryDate, withExtra: withExtra, developmentTime: developmentTime,
+    //     developmentCost: developmentCost}
+    // }})
+
+    res.send({ msg: 'Work added successfully!', data: workDetails, status: 200 })
+  } catch (e) {
+    res.send({ msg: e.message, status: 400 })
+  }
+}
+
 const addInvoice = async (req, res) => {
   try {
-    const { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate } = req.body
-    const newInvoiceData = { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate }
+    const { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate, clientId } = req.body
+    const newInvoiceData = { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate, clientId }
     const newInvoice = await Invoice.create(newInvoiceData)
     res.send({ msg: 'Invoice created successfully!', data: newInvoice, status: 200 })
   } catch (error) {
@@ -34,5 +59,6 @@ const deleteInvoice = async (req, res) => {
 module.exports = {
   getAllInvoices,
   addInvoice,
-  deleteInvoice
+  deleteInvoice,
+  addWork
 }

@@ -1,21 +1,33 @@
-const Works = require('../models/work')
+const Works = require("../models/work");
 
 const getAllWorks = async (req, res) => {
   try {
-    const result = await Works.find()
-    res.send({ msg: 'Got all Works successfully!', data: result, status: 200 })
+    const result = await Works.find();
+    res.send({ msg: "Got all Works successfully!", data: result, status: 200 });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
-}
+};
 
 const addWork = async (req, res) => {
   try {
-    const { clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost } = req.body
+    const {
+      clientId,
+      workDescription,
+      deliveryDate,
+      withExtra,
+      developmentTime,
+      developmentCost,
+    } = req.body;
     const newWork = {
-      clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost
-    }
-    const workDetails = await Works.create(newWork)
+      clientId,
+      workDescription,
+      deliveryDate,
+      withExtra,
+      developmentTime,
+      developmentCost,
+    };
+    const workDetails = await Works.create(newWork);
     // const obj = JSON.parse(JSON.stringify(workDetails))
 
     // obj["task"].push({
@@ -28,29 +40,44 @@ const addWork = async (req, res) => {
     //     developmentCost: developmentCost}
     // }})
 
-    res.send({ msg: 'Work added successfully!', data: workDetails, status: 200 })
+    res.send({
+      msg: "Quotation added successfully!",
+      data: workDetails,
+      status: 200,
+    });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
-}
+};
 
 const updateWork = async (req, res) => {
   try {
-    const { workId } = req.query
-    const { clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost } = req.body
+    const { workId } = req.query;
+    const {
+      clientId,
+      workDescription,
+      deliveryDate,
+      withExtra,
+      developmentTime,
+      developmentCost,
+    } = req.body;
     const result = await Works.findByIdAndUpdate(workId, {
       clientId,
       workDescription,
       deliveryDate,
       withExtra,
       developmentTime,
-      developmentCost
-    })
-    res.send({ msg: 'Project updated successfully!', data: result, status: 200 })
+      developmentCost,
+    });
+    res.send({
+      msg: "Project updated successfully!",
+      data: result,
+      status: 200,
+    });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
-}
+};
 
 // const addNewWork = async (req, res) => {
 //     const { workId } = req.query;
@@ -102,19 +129,37 @@ const updateWork = async (req, res) => {
 
 const deleteWork = async (req, res) => {
   try {
-    const { id } = req.params
-    const deleteById = await Works.findByIdAndDelete(id)
-    res.send({ msg: 'Work deleted successfully!', data: deleteById, status: 200 })
+    const { workId } = req.query;
+    const workTodelete = JSON.parse(workId);
+    const deleteById = await Works.deleteMany({ _id: { $in: workTodelete } });
+    res.send({
+      msg: "Work deleted successfully!",
+      data: deleteById,
+      status: 200,
+    });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
-}
+};
+// const deleteWork = async (req, res) => {
+//   try {
+//     const { id } = req.params;
+//     const deleteById = await Works.findByIdAndDelete(id);
+//     res.send({
+//       msg: "Work deleted successfully!",
+//       data: deleteById,
+//       status: 200,
+//     });
+//   } catch (e) {
+//     res.send({ msg: e.message, status: 400 });
+//   }
+// };
 
 module.exports = {
   addWork,
-  // getWorkWithClientId,
+  //getWorkWithClientId,
   getAllWorks,
-  // addNewWork,
+  //addNewWork,
   deleteWork,
-  updateWork
-}
+  updateWork,
+};
