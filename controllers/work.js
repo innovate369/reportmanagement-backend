@@ -2,7 +2,7 @@ const Works = require("../models/work");
 
 const getAllWorks = async (req, res) => {
   try {
-    const result = await Works.find();
+    const result = await Works.find({ isNewWork: true });
     res.send({ msg: "Got all Works successfully!", data: result, status: 200 });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
