@@ -1,3 +1,7 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable semi */
+/* eslint-disable quotes */
+/* eslint-disable spaced-comment */
 //const { upload } = require("../middleware/upload");
 const Users = require("../models/users");
 const Projects = require("../models/projects");

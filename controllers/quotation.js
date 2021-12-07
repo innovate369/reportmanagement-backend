@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable semi */
+/* eslint-disable quotes */
 /* eslint-disable no-unused-vars */
 const Clients = require("../models/clients");
 const { update } = require("../models/quotation");

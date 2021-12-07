@@ -34,7 +34,7 @@ const getAllProjects = async (req, res) => {
         ]
       }).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
         .skip(skip)
-      res.send({ msg: 'Successfully got all Projects!', data: allProjects, status: 200 })
+      res.send({ msg: 'Successfully got all Projects!', data: { allProjects, totalCount }, status: 200 })
     }
   } catch (e) {
     res.send({ msg: e.message, status: 400 })

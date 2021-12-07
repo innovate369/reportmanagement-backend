@@ -1,3 +1,6 @@
+/* eslint-disable semi */
+/* eslint-disable quotes */
+/* eslint-disable indent */
 const Clients = require("../models/clients");
 const Users = require("../models/users");
 const projects = require("../models/projects");
