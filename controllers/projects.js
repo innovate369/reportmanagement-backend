@@ -1,3 +1,4 @@
+/* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
 const Projects = require('../models/projects')
 const Clients = require('../models/clients')
@@ -10,6 +11,9 @@ const getAllProjects = async (req, res) => {
     const limit = parseInt(size, 10)
     const skip = (page - 1) * size
 
+    const totalResults = await Clients.find();
+    const totalCount = totalResults.length;
+
     if (clientId === '') {
       const allProjects = await Projects.find(
         {
@@ -20,7 +24,7 @@ const getAllProjects = async (req, res) => {
         }
       ).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
         .skip(skip)
-      res.send({ msg: process.env.SUCCESS_MESSAGE, data: allProjects, status: 200 })
+      res.send({ msg: process.env.SUCCESS_MESSAGE, data: { allProjects, totalCount }, status: 200 })
     } else {
       const allProjects = await Projects.find({
         clientId,
