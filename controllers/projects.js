@@ -11,7 +11,7 @@ const getAllProjects = async (req, res) => {
     const limit = parseInt(size, 10)
     const skip = (page - 1) * size
 
-    const totalResults = await Clients.find();
+    const totalResults = await Projects.find();
     const totalCount = totalResults.length;
 
     if (clientId === '') {
@@ -20,7 +20,7 @@ const getAllProjects = async (req, res) => {
           $or: [{ details: { $regex: search, $options: 'i' } }, { technologies: { $regex: search, $options: 'i' } },
             { credentials: { $regex: search, $options: 'i' } }, { duration: { $regex: search, $options: 'i' } },
             { projectName: { $regex: search, $options: 'i' } },
-            { upload: { $regex: search, $options: 'i' } }]
+          ]
         }
       ).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
         .skip(skip)
@@ -31,7 +31,7 @@ const getAllProjects = async (req, res) => {
         $or: [{ details: { $regex: search, $options: 'i' } }, { technologies: { $regex: search, $options: 'i' } },
           { credentials: { $regex: search, $options: 'i' } }, { duration: { $regex: search, $options: 'i' } },
           { projectName: { $regex: search, $options: 'i' } },
-          { upload: { $regex: search, $options: 'i' } }]
+        ]
       }).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
         .skip(skip)
       res.send({ msg: 'Successfully got all Projects!', data: allProjects, status: 200 })
