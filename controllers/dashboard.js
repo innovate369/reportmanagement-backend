@@ -14,7 +14,8 @@ const recordCount = async (req, res) => {
         countArray.push(userNum)
         const projectNum = await projects.countDocuments();
         countArray.push(projectNum)
-        res.render('adminDesktop', { totalClients: countArray[0], totalUsers: countArray[1], totalProjects: countArray[2] })
+        // res.render('adminDesktop', { totalClients: countArray[0], totalUsers: countArray[1], totalProjects: countArray[2] })
+        res.send({ msg: 'counts got successfully', data: { totalClients: countArray[0], totalUsers: countArray[1], totalProjects: countArray[2] }, status: 200 })
     } catch (error) {
         res.send(error)
     }

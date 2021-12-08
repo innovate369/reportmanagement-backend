@@ -1,3 +1,5 @@
+/* eslint-disable padded-blocks */
+/* eslint-disable no-trailing-spaces */
 /* eslint-disable comma-dangle */
 /* eslint-disable semi */
 /* eslint-disable quotes */
@@ -94,12 +96,14 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate("clientId");
+    const quotationById = await Quotation.findById(id).populate("clientId workId");
+
     res.send({
       msg: "Successfully got Quotation data",
-      data: quotationById,
+      data: { quotationById },
       status: 200,
     });
+
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
   }
