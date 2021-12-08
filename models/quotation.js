@@ -8,7 +8,7 @@ const quotationSchema = new mongoose.Schema(
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
     project: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
     projectName: String,
-    invoiceNum: Number,
+    invoiceNum: String,
     subCost: Number,
     cGST: Number,
     sGST: Number,
