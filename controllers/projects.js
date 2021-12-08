@@ -22,7 +22,7 @@ const getAllProjects = async (req, res) => {
             { projectName: { $regex: search, $options: 'i' } },
           ]
         }
-      ).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
+      ).populate('clientId developerId').sort({ createdOn: 1 }).limit(limit)
         .skip(skip)
       res.send({ msg: process.env.SUCCESS_MESSAGE, data: { allProjects, totalCount }, status: 200 })
     } else {
@@ -32,7 +32,7 @@ const getAllProjects = async (req, res) => {
           { credentials: { $regex: search, $options: 'i' } }, { duration: { $regex: search, $options: 'i' } },
           { projectName: { $regex: search, $options: 'i' } },
         ]
-      }).populate('clientId developerId').sort({ createdOn: -1 }).limit(limit)
+      }).populate('clientId developerId').sort({ createdOn: 1 }).limit(limit)
         .skip(skip)
       res.send({ msg: 'Successfully got all Projects!', data: { allProjects, totalCount }, status: 200 })
     }
