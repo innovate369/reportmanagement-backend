@@ -96,30 +96,13 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate("clientId");
+    const quotationById = await Quotation.findById(id).populate("clientId workId");
 
-    const quotationWorkData = quotationById.workId;
-    for (let i = 0; i < quotationWorkData.length; i++) {
-
-      const allWorks = quotationWorkData[i];
-      const workData = await Works.find({ _id: allWorks })
-
-      for (let j = 0; j < workData.length; j++) {
-        const workDescription = workData[j].workDescription;
-        const developmentTime = workData[j].developmentTime;
-        const developmentCost = workData[j].developmentCost;
-        const deliveryDate = workData[j].deliveryDate;
-        const withExtra = workData[j].withExtra;
-
-        res.send({
-          msg: "Successfully got Quotation data",
-          data: { quotationById, workDescription, developmentTime, developmentCost, deliveryDate, withExtra },
-          status: 200,
-        });
-
-      }
-
-    }
+    res.send({
+      msg: "Successfully got Quotation data",
+      data: { quotationById },
+      status: 200,
+    });
 
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
