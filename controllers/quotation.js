@@ -96,7 +96,14 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate("clientId workId projectId");
+    const quotationById = await Quotation.findById(id).populate({ 
+      path: 'projectId',
+      populate: {
+        path: 'workId',
+        model: "Works",
+      }
+    } 
+    );
 
     res.send({
       msg: "Successfully got Quotation data",
@@ -140,7 +147,7 @@ const addQuotation = async (req, res) => {
   const addNewQuotation = await Quotation.create(newQuotation);
 
   const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
-    $push: { workId: workId },
+    $addToSet: { workId: workId },
   });
 
   const updateWork = await Works.updateMany(
