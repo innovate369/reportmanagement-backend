@@ -4,10 +4,9 @@ const db = require("../config/db");
 
 const quotationSchema = new mongoose.Schema(
   {
-    workId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Works" }],
+    workId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Works", unique: true }],
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
-    projectName: String,
     invoiceNum: String,
     subCost: Number,
     cGST: Number,
