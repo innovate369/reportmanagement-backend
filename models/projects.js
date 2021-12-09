@@ -5,7 +5,7 @@ const { Schema } = mongoose
 
 const projectSchema = new Schema({
   developerId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Users' }],
-  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works' }],
+  workId: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Works', unique: true }],
   clientId: { type: mongoose.Schema.Types.ObjectId, ref: 'Clients' },
   technologies: Array,
   credentials: String,
