@@ -1,4 +1,5 @@
-const { application } = require("express");
+/* eslint-disable semi */
+/* eslint-disable quotes */
 const express = require("express");
 const router = express.Router();
 const users = require("./users");

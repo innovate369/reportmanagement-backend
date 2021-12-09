@@ -57,7 +57,7 @@ const getQuotation = async (req, res) => {
   try {
     const { clientId } = req.query;
     const quotation = await Quotation.findOne({ clientId }).populate(
-      "clientId workId"
+      "clientId workId projectId"
     );
     console.log(quotation.workId.length);
 
@@ -96,7 +96,7 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate("clientId workId");
+    const quotationById = await Quotation.findById(id).populate("clientId workId projectId");
 
     res.send({
       msg: "Successfully got Quotation data",
@@ -121,8 +121,7 @@ const addQuotation = async (req, res) => {
     iGST,
     invoiceAmount,
     subCost,
-    project,
-    projectName
+    projectId
   } = req.body;
   const newQuotation = {
     clientId,
@@ -135,13 +134,12 @@ const addQuotation = async (req, res) => {
     invoiceAmount,
     subCost,
     workId,
-    project,
-    projectName,
+    projectId,
     invoiceNum: Math.random().toString(36).slice(2)
   };
   const addNewQuotation = await Quotation.create(newQuotation);
 
-  const addWorkToProject = await Projects.findByIdAndUpdate(project, {
+  const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
     $push: { workId: workId },
   });
 

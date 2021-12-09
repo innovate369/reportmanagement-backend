@@ -1,5 +1,7 @@
+/* eslint-disable semi */
+/* eslint-disable quotes */
 const express = require("express");
-
+const auth = require("../middleware/auth")
 const router = express.Router();
 
 const {
@@ -9,22 +11,23 @@ const {
   updateProject,
   deleteProject,
   bindDeveloper,
-  addTask,
+  addTask
 } = require("../controllers/projects");
+
 const { fileStore } = require("../middleware/upload");
+
 const {
   checkAddProject,
-  validate,
-  checkBindDeveloper,
+  validate
 } = require("../middleware/fieldValidator");
 
-router.get("/", getAllProjects);
-router.get("/:id", getProjectById);
+router.get("/", auth, getAllProjects);
+router.get("/:id", auth, getProjectById);
 router.post(
   "/add",
   fileStore.fields([
     { name: "image", maxCount: 1 },
-    { name: "clientCSV", maxCount: 1 },
+    { name: "clientCSV", maxCount: 1 }
   ]),
   checkAddProject,
   validate,

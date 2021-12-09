@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 /* eslint-disable comma-dangle */
 /* eslint-disable no-unused-vars */
 const Projects = require('../models/projects')
@@ -27,7 +28,7 @@ const getAllProjects = async (req, res) => {
       res.send({ msg: process.env.SUCCESS_MESSAGE, data: { allProjects, totalCount }, status: 200 })
     } else {
       const allProjects = await Projects.find({
-        clientId,
+        clientId: clientId,
         $or: [{ details: { $regex: search, $options: 'i' } }, { technologies: { $regex: search, $options: 'i' } },
           { credentials: { $regex: search, $options: 'i' } }, { duration: { $regex: search, $options: 'i' } },
           { projectName: { $regex: search, $options: 'i' } },
@@ -61,8 +62,6 @@ const addProject = async (req, res) => {
     duration,
     projectName,
     startDate,
-    // image,
-    // clientCSV
   } = req.body
 
   const newProject = {
@@ -74,14 +73,9 @@ const addProject = async (req, res) => {
     duration,
     projectName,
     startDate,
-    // image,
-    // clientCSV,
-    // upload: req.files.image[0].filename,
-    // csvName: req.files.clientCSV[0].filename
   }
   const addproject = await Projects.create(newProject)
   console.log(addproject._id)
-  // const addedProject = await Projects.findOne({ _id: addProject._id })
   const addProjectToClient = await Clients.findByIdAndUpdate(clientId, { $push: { projects: { _id: addproject._id } } })
 
   res.send({ msg: 'New project added succesfully!', data: addproject, status: 200 })
@@ -109,9 +103,6 @@ const addTask = async (req, res) => {
       }
     }
   )
-
-  // const addWorkToProject = await Projects.findOneAndUpdate({ clientId: clientId }, { $push: { workId: workId } })
-  // const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId } })
 
   res.send({ msg: 'Worked added to project successfully!', data: addNewWork, status: 200 })
 }
