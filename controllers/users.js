@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable prefer-const */
 /* eslint-disable comma-dangle */
 /* eslint-disable semi */
 /* eslint-disable quotes */
@@ -6,7 +8,7 @@
 const Users = require("../models/users");
 const Projects = require("../models/projects");
 const bcrypt = require("bcrypt");
-const saltRounds = 10;
+const { cookie } = require("cookie");
 
 const getAllUsers = async (req, res) => {
   try {
@@ -64,48 +66,65 @@ const addUser = async (req, res) => {
 };
 
 const regUser = async (req, res) => {
+  const saltRounds = await bcrypt.genSalt(10);
   const hashedPwd = await bcrypt.hash(req.body.password, saltRounds);
-  const {
-    userType,
-    email,
-    userName,
-    phoneNumber,
-    address,
-    firstName,
-    lastName,
-  } = req.body;
-  let regUser = {
-    userType,
-    email,
+
+  const regUser = new Users({
+    userType: req.body.userType,
+    email: req.body.userType,
     password: hashedPwd,
-    userName,
-    phoneNumber,
-    address,
-    firstName,
-    lastName,
-  };
-  const insertResult = await Users.create(regUser);
-  res.send({ msg: insertResult, status: 200 });
+    userName: req.body.userName,
+    phoneNumber: req.body.phoneNumber,
+    address: req.body.address,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+  });
+
+  const token = await regUser.generateAuthToken();
+
+  res.cookie("regCookie", token, {
+    expires: new Date(Date.now() + 30000),
+    httpOnly: true
+  })
+
+  const registered = await regUser.save();
+  // const insertResult = await Users.create(regUser);
+
+  res.send({ msg: registered, status: 200 });
 };
 
 const userLogin = async (req, res) => {
-  const user = await Users.findOne({
-    $or: [{ userName: req.body.userName }, { email: req.body.email }],
-  });
-  if (user) {
-    const cmp = await bcrypt.compare(req.body.password, user.password);
-    if (cmp) {
-      const projectList = await Projects.find({});
-      res.send({
-        msg: "Authentication Successful",
-        data: projectList,
-        status: 200,
-      });
-    } else {
-      res.send({ msg: "Wrong username or password." });
+  try {
+    const user = await Users.findOne({
+      $or: [{ userName: req.body.userName }, { email: req.body.email }],
+    });
+
+    if (user) {
+      const cmp = await bcrypt.compare(req.body.password, user.password);
+
+      if (cmp) {
+        const token = await user.generateAuthToken();
+        res.cookie("loginCookie", token, {
+          expires: new Date(Date.now() + 300000),
+          httpOnly: true,
+          // secure: true
+        })
+        await user.save()
+        const projectList = await Projects.find({});
+        res.send({
+          msg: "Authentication Successful",
+          data: projectList,
+          status: 200,
+        });
+      } else {
+        res.send({ msg: "Wrong username or password." });
+      }
     }
+  } catch (error) {
+    res.send({ msg: error.message, status: 400 });
   }
 };
+
 const updateUser = async (req, res) => {
   const { id } = req.params;
   const updateById = await Users.findByIdAndUpdate(id, req.body, {
@@ -129,10 +148,18 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const fileUpload = (req, res) => {
-  console.log(req.file);
-  res.send("Single FIle upload success");
-};
+const userLogout = async (req, res) => {
+  try {
+    req.user.tokens = req.user.tokens.filter((currToken) => {
+      return currToken.token !== req.token;
+    })
+    res.clearCookie("loginCookie");
+    await req.user.save();
+    res.send({ msg: 'success', status: 200 })
+  } catch (error) {
+    res.send({ msg: error.msg, status: 400 });
+  }
+}
 
 module.exports = {
   getAllUsers,
@@ -140,7 +167,7 @@ module.exports = {
   addUser,
   updateUser,
   deleteUser,
-  fileUpload,
   regUser,
   userLogin,
+  userLogout
 };

@@ -1,3 +1,6 @@
+/* eslint-disable comma-dangle */
+/* eslint-disable quotes */
+/* eslint-disable semi */
 const Clients = require("../models/clients");
 
 const getAllClients = async (req, res) => {
