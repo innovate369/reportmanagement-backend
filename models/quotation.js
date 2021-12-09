@@ -6,7 +6,7 @@ const quotationSchema = new mongoose.Schema(
   {
     workId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Works" }],
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
-    project: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
+    projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
     projectName: String,
     invoiceNum: String,
     subCost: Number,
