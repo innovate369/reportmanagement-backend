@@ -102,6 +102,8 @@ const addClient = async (req, res) => {
     cityName,
     pinCode,
     projectId,
+    type,
+    projectName
   } = req.body;
   const newClient = {
     businessCategory,
@@ -120,6 +122,8 @@ const addClient = async (req, res) => {
     contactPerson,
     gstNum,
     email,
+    type,
+    projectName
   };
   const addNewClient = await Clients.create(newClient);
   res.send({
