@@ -189,6 +189,39 @@ const updateClient = async (req, res) => {
   });
 };
 
+const leadStatus = async (req, res) => {
+  try {
+    const { accepted, id } = req.query;
+    const { reason } = req.body;
+    if (accepted === "true") {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "Client", status: "approved" } }, {
+        runValidator: true,
+        new: true,
+      })
+      res.send({
+        msg: "Lead approved!",
+        data: updateLead,
+        status: 200,
+      });
+    } else {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { status: "rejected", rejectionReason: reason } }, {
+        runValidator: true,
+        new: true,
+      })
+      res.send({
+        msg: "Lead rejected!",
+        data: updateLead,
+        status: 200,
+      });
+    }
+  } catch (error) {
+    res.send({
+      msg: error.msg,
+      status: 400,
+    })
+  }
+}
+
 module.exports = {
   getAllClients,
   addClient,
@@ -198,4 +231,5 @@ module.exports = {
   getClientById,
   clientData,
   updateClient,
+  leadStatus
 };

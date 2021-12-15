@@ -22,7 +22,9 @@ const clientSchema = new mongoose.Schema({
   cityName: String,
   pinCode: String,
   createdOn: { type: Date, default: Date.now },
-  type: String
+  type: String,
+  status: String,
+  rejectionReason: String
 }, { collection: 'Clients' })
 
 const Clients = db.model('Clients', clientSchema)
