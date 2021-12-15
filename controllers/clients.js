@@ -5,31 +5,53 @@ const Clients = require("../models/clients");
 
 const getAllClients = async (req, res) => {
   try {
-    const { page, size = 10, search } = req.query;
+    const { page, size = 10, search, type } = req.query;
     const limit = parseInt(size, 10);
     const skip = (page - 1) * size;
 
     const totalResults = await Clients.find();
     const totalCount = totalResults.length;
 
-    const result = await Clients.find({
-      $or: [
-        { businessCategory: { $regex: search, $options: "i" } },
-        { companyName: { $regex: search, $options: "i" } },
-        { ledgerName: { $regex: search, $options: "i" } },
-        { ownerName: { $regex: search, $options: "i" } },
-        { contactPerson: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-      ],
-    })
-      .limit(limit)
-      .skip(skip)
-      .sort("createdOn");
-    res.send({
-      msg: "Got all Clients succuessfully!",
-      data: { result, totalCount },
-      status: 200,
-    });
+    if (type === "lead") {
+      const result = await Clients.find({
+        type: type,
+        $or: [
+          { businessCategory: { $regex: search, $options: "i" } },
+          { companyName: { $regex: search, $options: "i" } },
+          { ledgerName: { $regex: search, $options: "i" } },
+          { ownerName: { $regex: search, $options: "i" } },
+          { contactPerson: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+      })
+        .limit(limit)
+        .skip(skip)
+        .sort("createdOn");
+      res.send({
+        msg: "Got all Clients succuessfully!",
+        data: { result, totalCount },
+        status: 200,
+      });
+    } else {
+      const result = await Clients.find({
+        $or: [
+          { businessCategory: { $regex: search, $options: "i" } },
+          { companyName: { $regex: search, $options: "i" } },
+          { ledgerName: { $regex: search, $options: "i" } },
+          { ownerName: { $regex: search, $options: "i" } },
+          { contactPerson: { $regex: search, $options: "i" } },
+          { email: { $regex: search, $options: "i" } },
+        ],
+      })
+        .limit(limit)
+        .skip(skip)
+        .sort("createdOn");
+      res.send({
+        msg: "Got all Clients succuessfully!",
+        data: { result, totalCount },
+        status: 200,
+      });
+    }
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
   }
