@@ -11,7 +11,8 @@ const {
   deleteClient,
   clientInvoice,
   bindProject,
-  updateClient
+  updateClient,
+  leadStatus
 } = require('../controllers/clients')
 const { checkAddClient, validate } = require('../middleware/fieldValidator')
 
@@ -23,5 +24,6 @@ router.delete('/delete/:id', deleteClient)
 router.get('/invoice/:id', clientInvoice)
 router.put('/bindProject', bindProject)
 router.put('/edit/:id', updateClient)
+router.put('/leadStatus', leadStatus)
 
 module.exports = router
