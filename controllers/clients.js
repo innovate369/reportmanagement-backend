@@ -34,6 +34,7 @@ const getAllClients = async (req, res) => {
       });
     } else {
       const result = await Clients.find({
+        type: { $ne: "lead" },
         $or: [
           { businessCategory: { $regex: search, $options: "i" } },
           { companyName: { $regex: search, $options: "i" } },
@@ -194,7 +195,7 @@ const leadStatus = async (req, res) => {
     const { accepted, id } = req.query;
     const { reason } = req.body;
     if (accepted === "true") {
-      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "Client", status: "approved" } }, {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "client", status: "approved" }, $unset: { rejectionReason: "" } }, {
         runValidator: true,
         new: true,
       })
@@ -204,7 +205,7 @@ const leadStatus = async (req, res) => {
         status: 200,
       });
     } else {
-      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { status: "rejected", rejectionReason: reason } }, {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: reason } }, {
         runValidator: true,
         new: true,
       })
