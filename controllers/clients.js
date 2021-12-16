@@ -9,9 +9,6 @@ const getAllClients = async (req, res) => {
     const limit = parseInt(size, 10);
     const skip = (page - 1) * size;
 
-    const totalResults = await Clients.find();
-    const totalCount = totalResults.length;
-
     if (type === "lead") {
       const result = await Clients.find({
         type: type,
@@ -27,6 +24,7 @@ const getAllClients = async (req, res) => {
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
+      const totalCount = result.length;
       res.send({
         msg: "Got all Clients succuessfully!",
         data: { result, totalCount },
@@ -47,6 +45,7 @@ const getAllClients = async (req, res) => {
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
+      const totalCount = result.length;
       res.send({
         msg: "Got all Clients succuessfully!",
         data: { result, totalCount },
