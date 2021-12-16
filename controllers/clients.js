@@ -9,7 +9,7 @@ const getAllClients = async (req, res) => {
     const limit = parseInt(size, 10);
     const skip = (page - 1) * size;
 
-    if (type === "lead") {
+    if (type === "lead" || type === "pending") {
       const result = await Clients.find({
         type: type,
         $or: [
@@ -129,7 +129,7 @@ const addClient = async (req, res) => {
   };
   const addNewClient = await Clients.create(newClient);
   res.send({
-    msg: "New Client added succesfully!",
+    msg: "New client/lead is added succesfully!",
     data: addNewClient,
     status: 200,
   });
@@ -194,7 +194,7 @@ const updateClient = async (req, res) => {
 const leadStatus = async (req, res) => {
   try {
     const { accepted, id } = req.query;
-    const { reason } = req.body;
+    const { rejectionReason } = req.body;
     if (accepted === "true") {
       const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "client", status: "approved" }, $unset: { rejectionReason: "" } }, {
         runValidator: true,
@@ -206,7 +206,7 @@ const leadStatus = async (req, res) => {
         status: 200,
       });
     } else {
-      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: reason } }, {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
         runValidator: true,
         new: true,
       })

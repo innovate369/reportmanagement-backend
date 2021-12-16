@@ -23,7 +23,7 @@ const clientSchema = new mongoose.Schema({
   pinCode: String,
   createdOn: { type: Date, default: Date.now },
   type: String,
-  status: String,
+  status: { type: String, default: 'pending' },
   rejectionReason: String
 }, { collection: 'Clients' })
 

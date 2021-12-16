@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable quotes */
 const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const db = require("../config/db");
@@ -15,7 +17,7 @@ const quotationSchema = new mongoose.Schema(
     quotationDate: { type: Date, default: Date.now },
     invoiceBy: String,
     invoiceAmount: Number,
-    invoiceType: { type: Boolean, default: false },
+    invoiceType: { type: Boolean, default: false }
   },
   { collection: "Quotation" }
 );
