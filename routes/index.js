@@ -9,6 +9,7 @@ const dashboard = require("./dashboard");
 const quotation = require("./quotation");
 const Invoices = require("./invoice");
 const Works = require("./work");
+const Profile = require("./profile");
 
 router.use("/users", users);
 router.use("/projects", projects);
@@ -17,5 +18,6 @@ router.use("/dashboard", dashboard);
 router.use("/quotation", quotation);
 router.use("/invoice", Invoices);
 router.use("/work", Works);
+router.use("/profile", Profile);
 
 module.exports = router;

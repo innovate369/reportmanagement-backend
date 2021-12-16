@@ -1,3 +1,5 @@
+/* eslint-disable semi */
+/* eslint-disable quotes */
 const express = require("express");
 
 const router = express.Router();
@@ -10,7 +12,7 @@ const {
   getAllQuotations,
   updateProject,
   getQuotationById,
-  editQuotation,
+  editQuotation
 } = require("../controllers/quotation");
 // const { checkAddQuotation, validate } = require("../middleware/fieldValidator");
 
