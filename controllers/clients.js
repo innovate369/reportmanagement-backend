@@ -24,9 +24,10 @@ const getAllClients = async (req, res) => {
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
-      const totalCount = result.length;
+      const totalLeads = await Clients.find({ type: type })
+      const totalCount = totalLeads.length;
       res.send({
-        msg: "Got all Clients succuessfully!",
+        msg: "Got all leads succuessfully!",
         data: { result, totalCount },
         status: 200,
       });
@@ -45,7 +46,8 @@ const getAllClients = async (req, res) => {
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
-      const totalCount = result.length;
+      const totalClients = await Clients.find({ type: { $ne: "lead" } })
+      const totalCount = totalClients.length;
       res.send({
         msg: "Got all Clients succuessfully!",
         data: { result, totalCount },
