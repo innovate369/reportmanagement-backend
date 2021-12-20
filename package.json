@@ -2,55 +2,30 @@
   "name": "reportmanagement",
   "version": "1.0.0",
   "description": "��#\u0000 \u0000b\u0000a\u0000c\u0000k\u0000e\u0000n\u0000d\u0000-\u0000n\u0000o\u0000d\u0000e\u0000j\u0000s\u0000\r\u0000 \u0000",
-  "main": "index.js",
+  "main": "app.js",
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.3",
+    "eslint-plugin-promise": "^5.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "git": "^0.1.5",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {},
   "scripts": {
-    "start": "node app.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint --fix --ext .js,.jsx .",
-    "format": "prettier --write \"src/**/*.{js,jsx}\"",
-    "prepare": "husky install"
+    "start": "node app.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/innovate369/backend-nodejs.git"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/innovate369/backend-nodejs/issues"
   },
-  "homepage": "https://github.com/innovate369/backend-nodejs#readme",
-  "dependencies": {
-    "bcrypt": "^5.0.1",
-    "body-parser": "^1.19.0",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "csv-parser": "^3.0.0",
-    "csvtojson": "^2.0.10",
-    "dotenv": "^10.0.0",
-    "ejs": "^3.1.6",
-    "express": "^4.17.1",
-    "express-router": "0.0.1",
-    "express-validator": "^6.13.0",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.0.10",
-    "mongoose-aggregate-paginate-v2": "^1.0.5",
-    "multer": "^1.4.3",
-    "regex": "^0.1.1",
-    "request-promise-native": "^1.0.9"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.15.8",
-    "@typescript-eslint/eslint-plugin": "^5.4.0",
-    "@typescript-eslint/parser": "^5.4.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^19.0.0",
-    "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-node": "^11.1.0",
-    "eslint-plugin-promise": "^5.1.1",
-    "husky": "^7.0.4"
-  }
+  "homepage": "https://github.com/innovate369/backend-nodejs#readme"
 }

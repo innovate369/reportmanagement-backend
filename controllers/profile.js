@@ -7,7 +7,7 @@ const getProfile = async (req, res) => {
     res.send({
       msg: 'got profile successfully!',
       data: getProfile,
-      status: 400
+      status: 200
     })
   } catch (error) {
     res.send({ msg: error.msg, status: 400 })
