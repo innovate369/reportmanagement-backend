@@ -185,7 +185,7 @@ const updateClient = async (req, res) => {
     new: true,
   });
   res.send({
-    msg: "Clients data updated succesfully!",
+    msg: "Clients data updated successfully!",
     data: updateById,
     status: 200,
   });
