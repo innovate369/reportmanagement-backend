@@ -21,8 +21,8 @@ const {
   validate
 } = require("../middleware/fieldValidator");
 
-router.get("/", auth, getAllProjects);
-router.get("/:id", auth, getProjectById);
+router.get("/", getAllProjects);
+router.get("/:id", getProjectById);
 router.post(
   "/add",
   fileStore.fields([
