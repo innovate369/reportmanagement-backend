@@ -18,6 +18,6 @@ router.put("/update/:id", checkAddUser, validate, updateUser);
 router.delete("/delete/:id", deleteUser);
 router.post("/register", checkAddUser, validate, regUser);
 router.post("/login", checkLoginUser, validate, userLogin);
-router.get("/logout/:id", auth, userLogout);
+router.get("/logout/:id", userLogout);
 
 module.exports = router;
