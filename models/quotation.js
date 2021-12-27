@@ -1,5 +1,3 @@
-/* eslint-disable semi */
-/* eslint-disable quotes */
 const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
 const db = require("../config/db");

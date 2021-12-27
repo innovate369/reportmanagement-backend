@@ -1,8 +1,3 @@
-/* eslint-disable eol-last */
-/* eslint-disable semi */
-/* eslint-disable no-undef */
-/* eslint-disable quotes */
-/* eslint-disable indent */
 const mongoose = require("mongoose");
 const db = require("../config/db")
 const jwt = require("jsonwebtoken");
@@ -13,7 +8,7 @@ const userSchema = new mongoose.Schema({
     userType: String,
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
     email: String,
-    userName: String,
+    userName: { type: String, unique: true },
     password: String,
     phoneNumber: String,
     createdOn: { type: Date, default: Date.now },

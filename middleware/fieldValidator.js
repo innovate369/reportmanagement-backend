@@ -1,4 +1,4 @@
-const { check, validationResult } = require('express-validator')
+const { check, validationResult } = require('express-validator');
 
 const checkAddUser = [
 
@@ -10,19 +10,11 @@ const checkAddUser = [
   check('password').notEmpty().withMessage('password is required'),
   check('password').isLength({ min: 8 }).withMessage('password must be at least 8 characters'),
 
-  check('firstName').notEmpty().withMessage('firstName is required'),
-  check('firstName').not().custom((val) => /[^a-zA-Z]/gi.test(val)).withMessage('firstName cannot include unique character'),
-
-  check('lastName').notEmpty().withMessage('lastName is required'),
-  check('lastName').not().custom((val) => /[^a-zA-Z]/gi.test(val)).withMessage('lastName cannot include unique character'),
-
   check('userName').notEmpty().withMessage('userName is required'),
   check('userName').not().custom((val) => /[^A-za-z0-9\s]/g.test(val)).withMessage('userName can not use unique characters'),
 
   check('phoneNumber').trim().isNumeric().withMessage('phone number must be numeric.'),
   check('phoneNumber').bail().isLength({ max: 12, min: 7 }).withMessage('phone number must be at least 10 digits long.').bail()
-
-  // check('address').notEmpty().withMessage('address is required'),
 
 ]
 

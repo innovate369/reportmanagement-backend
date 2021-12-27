@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const aggregatePaginate = require('mongoose-aggregate-paginate-v2')
-const db = require('../config/db')
+const mongoose = require('mongoose');
+const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
+const db = require('../config/db');
 
 const profileSchema = new mongoose.Schema({
   companyName: { type: String, required: true },
@@ -18,7 +18,7 @@ const profileSchema = new mongoose.Schema({
   logoName: String
 }, { collection: 'Profile' })
 
-const Profile = db.model('Profile', profileSchema)
-profileSchema.plugin(aggregatePaginate)
+const Profile = db.model('Profile', profileSchema);
+profileSchema.plugin(aggregatePaginate);
 
-module.exports = Profile
+module.exports = Profile;
