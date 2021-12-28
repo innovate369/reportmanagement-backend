@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const aggregatePaginate = require("mongoose-aggregate-paginate-v2");
+
 const db = require("../config/db");
 
 const quotationSchema = new mongoose.Schema(
@@ -7,7 +8,7 @@ const quotationSchema = new mongoose.Schema(
     workId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Works", unique: true }],
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
-    invoiceNum: String,
+    invoiceNum: Number,
     subCost: Number,
     cGST: Number,
     sGST: Number,
@@ -15,7 +16,8 @@ const quotationSchema = new mongoose.Schema(
     quotationDate: { type: Date, default: Date.now },
     invoiceBy: String,
     invoiceAmount: Number,
-    invoiceType: { type: Boolean, default: false }
+    invoiceType: { type: Boolean, default: false },
+    createdOn: { type: Date, default: Date.now }
   },
   { collection: "Quotation" }
 );

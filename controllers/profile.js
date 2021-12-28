@@ -2,7 +2,7 @@ const Profile = require('../models/profile');
 
 const getProfile = async (req, res) => {
   try {
-    const { id } = req.query;
+    const { id } = req.params;
     const getProfile = await Profile.find(id);
     res.send({
       msg: 'got profile successfully!',

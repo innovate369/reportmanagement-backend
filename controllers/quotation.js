@@ -1,5 +1,4 @@
 const Clients = require("../models/clients");
-const { update } = require("../models/quotation");
 const Quotation = require("../models/quotation");
 const Projects = require("../models/projects");
 const Works = require('../models/work');
@@ -96,6 +95,17 @@ const getQuotationById = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   try {
+
+    const quotationCount = await Quotation.countDocuments(); 
+    
+    let invoiceNum;
+    if (quotationCount == 0) {
+      invoiceNum = 1;
+    } else {
+      const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
+      invoiceNum = lastQuotation[0].invoiceNum + 1;
+    }
+
     const {
       clientId,
       invoiceBy,
@@ -121,7 +131,7 @@ const addQuotation = async (req, res) => {
       subCost,
       workId,
       projectId,
-      invoiceNum: Math.random().toString(36).slice(2)
+      invoiceNum
     };
     const addNewQuotation = await Quotation.create(newQuotation);
   
