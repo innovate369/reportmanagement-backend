@@ -8,6 +8,7 @@ const quotationSchema = new mongoose.Schema(
     workId: [{ type: mongoose.Schema.Types.ObjectId, ref: "Works", unique: true }],
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
     projectId: { type: mongoose.Schema.Types.ObjectId, ref: "Projects" },
+    projectName: String,
     invoiceNum: Number,
     subCost: Number,
     cGST: Number,
@@ -17,7 +18,8 @@ const quotationSchema = new mongoose.Schema(
     invoiceBy: String,
     invoiceAmount: Number,
     invoiceType: { type: Boolean, default: false },
-    createdOn: { type: Date, default: Date.now }
+    createdOn: { type: Date, default: Date.now },
+    quotationStatus: String
   },
   { collection: "Quotation" }
 );

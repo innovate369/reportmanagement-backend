@@ -95,19 +95,19 @@ const getQuotationById = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   try {
-    const todayDate = new Date();
-    const currentYear = todayDate.getFullYear();
+    // const todayDate = new Date();
+    // const currentYear = todayDate.getFullYear();
 
     const quotationCount = await Quotation.countDocuments(); 
     const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
-    const lastYear = lastQuotation[0].createdOn.getFullYear();
+   // const lastYear = lastQuotation[0].createdOn.getFullYear();
 
     let invoiceNum;
 
     if (quotationCount == 0) {
       invoiceNum = 1;
-    } else if (currentYear > lastYear) {
-      invoiceNum = 1;
+    // } else if (currentYear > lastYear) {
+    //   invoiceNum = 1;
     } else {
       invoiceNum = lastQuotation[0].invoiceNum + 1;
     }
@@ -123,7 +123,8 @@ const addQuotation = async (req, res) => {
       iGST,
       invoiceAmount,
       subCost,
-      projectId
+      projectId,
+      projectName
     } = req.body;
 
     const newQuotation = {
@@ -138,7 +139,8 @@ const addQuotation = async (req, res) => {
       subCost,
       workId,
       projectId,
-      invoiceNum
+      invoiceNum,
+      projectName
     };
     const addNewQuotation = await Quotation.create(newQuotation);
   
@@ -209,6 +211,39 @@ const deleteQuotation = async (req, res) => {
     res.send({ msg: e.message, status: 400 });
   }
 };
+
+const quotationStatus = async (req, res) => {
+  try {
+    const { quotationStatus, id } = req.query;
+    // const { rejectionReason } = req.body;
+    if (quotationStatus === "approved") {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "client", status: "approved" }, $unset: { rejectionReason: "" } }, {
+        runValidator: true,
+        new: true
+      })
+      res.send({
+        msg: "Lead approved!",
+        data: updateLead,
+        status: 200
+      });
+    } else {
+      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
+        runValidator: true,
+        new: true
+      })
+      res.send({
+        msg: "Lead rejected!",
+        data: updateLead,
+        status: 200
+      });
+    }
+  } catch (error) {
+    res.send({
+      msg: error.msg,
+      status: 400
+    })
+  }
+}
 
 module.exports = {
   getAllQuotations,
