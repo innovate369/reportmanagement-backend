@@ -17,6 +17,7 @@ const getAllQuotations = async (req, res) => {
       $or: [{ invoiceBy: { $regex: search, $options: "i" } }]
     })
       .populate("clientId")
+      .sort({ createdOn: -1 })
       .limit(limit)
       .skip(skip);
 
@@ -92,7 +93,7 @@ const addQuotation = async (req, res) => {
     // const currentYear = todayDate.getFullYear();
     const quotationCount = await Quotation.countDocuments(); 
     const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
-    const lastYear = lastQuotation[0].createdOn.getFullYear();
+    const previousYear = lastQuotation[0].createdOn.getFullYear();
 
     let invoiceNum;
 
@@ -111,13 +112,14 @@ const addQuotation = async (req, res) => {
       projectName
     } = req.body;
 
-    const currentYear = quotationDate.slice(0, 4);
-   
+    const thisYear = quotationDate.slice(0, 4);
+    const currentYear = parseInt(thisYear)
+    const lastYear = parseInt(previousYear)
 
     if (quotationCount == 0) {
       invoiceNum = 1;
-    // } else if (currentYear > lastYear) {
-    //   invoiceNum = 1;
+    } else if (currentYear > lastYear) {
+      invoiceNum = 1;
     } else {
       invoiceNum = lastQuotation[0].invoiceNum + 1;
     }
