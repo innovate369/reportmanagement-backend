@@ -12,10 +12,12 @@ const {
   editQuotation
 } = require("../controllers/quotation");
 
+const { validate, checkAddQuotation } = require("../middleware/fieldValidator")
+
 router.get("/", checkWhiteList, getAllQuotations);
 router.get("/quotationsByClient", checkWhiteList, getQuotation);
 router.get("/:id", checkWhiteList, getQuotationById);
-router.post("/add", addQuotation);
+router.post("/add", checkAddQuotation, validate, addQuotation);
 router.put("/update/:id", updateProject);
 router.put("/edit/:id", editQuotation);
 router.delete("/delete/:id", deleteQuotation);

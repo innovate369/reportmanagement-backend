@@ -62,6 +62,12 @@ const checkAddClient = [
   check('pinCode').trim().isNumeric().withMessage('pincode must be numeric.')
 ]
 
+const checkAddQuotation = [
+
+  check('quotationDate').trim().isDate().withMessage('Must be a valid date')
+
+]
+
 const validate = (req, res, next) => {
   const errors = validationResult(req)
   if (errors.isEmpty()) {
@@ -80,5 +86,6 @@ module.exports = {
   checkAddUser,
   checkLoginUser,
   checkAddProject,
-  checkAddClient
+  checkAddClient,
+  checkAddQuotation
 }

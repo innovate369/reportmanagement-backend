@@ -95,14 +95,20 @@ const getQuotationById = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   try {
+    const todayDate = new Date();
+    const currentYear = todayDate.getFullYear();
 
     const quotationCount = await Quotation.countDocuments(); 
-    
+    const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
+    const lastYear = lastQuotation[0].createdOn.getFullYear();
+
     let invoiceNum;
+
     if (quotationCount == 0) {
       invoiceNum = 1;
+    } else if (currentYear > lastYear) {
+      invoiceNum = 1;
     } else {
-      const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
       invoiceNum = lastQuotation[0].invoiceNum + 1;
     }
 
@@ -119,6 +125,7 @@ const addQuotation = async (req, res) => {
       subCost,
       projectId
     } = req.body;
+
     const newQuotation = {
       clientId,
       invoiceBy,
