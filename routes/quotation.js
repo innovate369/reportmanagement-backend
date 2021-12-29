@@ -9,7 +9,8 @@ const {
   getAllQuotations,
   updateProject,
   getQuotationById,
-  editQuotation
+  editQuotation,
+  quotationStatus
 } = require("../controllers/quotation");
 
 const { validate, checkAddQuotation } = require("../middleware/fieldValidator")
@@ -21,5 +22,6 @@ router.post("/add", checkAddQuotation, validate, addQuotation);
 router.put("/update/:id", updateProject);
 router.put("/edit/:id", editQuotation);
 router.delete("/delete/:id", deleteQuotation);
+router.put('/quotationStatus', quotationStatus)
 
 module.exports = router;

@@ -222,13 +222,13 @@ const quotationStatus = async (req, res) => {
         status: 200
       });
     } else {
-      const updaupdateQuotationteLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
+      const updateQuotation = await Quotation.findByIdAndUpdate({ _id: id }, { $set: { quotationStatus: "rejected" } }, {
         runValidator: true,
         new: true
       })
       res.send({
-        msg: "Lead rejected!",
-        data: updateLead,
+        msg: "Quotation rejected!",
+        data: updateQuotation,
         status: 200
       });
     }
@@ -247,5 +247,6 @@ module.exports = {
   deleteQuotation,
   updateProject,
   getQuotationById,
-  editQuotation
+  editQuotation,
+  quotationStatus
 }

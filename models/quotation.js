@@ -19,7 +19,7 @@ const quotationSchema = new mongoose.Schema(
     invoiceAmount: Number,
     invoiceType: { type: Boolean, default: false },
     createdOn: { type: Date, default: Date.now },
-    quotationStatus: String
+    quotationStatus: { type: String, default: 'pending' }
   },
   { collection: "Quotation" }
 );
