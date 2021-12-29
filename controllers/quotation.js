@@ -49,6 +49,7 @@ const getQuotation = async (req, res) => {
     const iGST = 0.18 * subCost;
     const cGST = 0.09 * subCost;
     const sGST = 0.09 * subCost;
+    const tds = 0.10 * subCost;
 
     const withGSTAmount = subCost + 0.18 * subCost;
     const withoutGSTAmount = subCost;
@@ -62,7 +63,8 @@ const getQuotation = async (req, res) => {
         withoutGSTAmount,
         iGST,
         cGST,
-        sGST
+        sGST,
+        tds
       },
       status: 200
     });
@@ -106,6 +108,7 @@ const addQuotation = async (req, res) => {
       cGST,
       sGST,
       iGST,
+      tds,
       invoiceAmount,
       subCost,
       projectId,
@@ -136,6 +139,7 @@ const addQuotation = async (req, res) => {
       cGST,
       sGST,
       iGST,
+      tds,
       invoiceAmount,
       subCost,
       workId,
