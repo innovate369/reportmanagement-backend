@@ -10,7 +10,7 @@ const {
 
 const { fileStore } = require("../middleware/upload");
 
-router.get('/:id', getProfile)
+router.get('/', getProfile)
 router.post('/add', fileStore.fields([{ name: 'logo', maxCount: 1 }]), addProfile)
 router.delete('/delete/:id', deleteProfile)
 router.put('/edit/:id', updateProfile)

@@ -2,8 +2,9 @@ const Profile = require('../models/profile');
 
 const getProfile = async (req, res) => {
   try {
-    const { id } = req.params;
-    const getProfile = await Profile.find(id);
+    const { isAdmin } = req.query;
+    console.log(isAdmin)
+    const getProfile = await Profile.find({ isAdmin: isAdmin });
     res.send({
       msg: 'got profile successfully!',
       data: getProfile,
@@ -27,7 +28,8 @@ const addProfile = async (req, res) => {
     bankType,
     accountNum,
     panNum,
-    logo
+    logo,
+    isAdmin
   } = req.body
   const newProfile = {
     companyName,
@@ -42,6 +44,7 @@ const addProfile = async (req, res) => {
     accountNum,
     panNum,
     logo,
+    isAdmin,
     logoName: req.files.logo[0].filename
   }
   const addProfile = await Profile.create(newProfile);

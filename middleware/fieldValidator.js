@@ -64,7 +64,7 @@ const checkAddClient = [
 
 const checkAddQuotation = [
 
-  check('quotationDate').trim().isDate().withMessage('Must be a valid date')
+  check('quotationDate').trim().isDate().isISO8601().withMessage('Must be a valid date')
 
 ]
 

@@ -15,7 +15,11 @@ const profileSchema = new mongoose.Schema({
   accountNum: String,
   panNum: String,
   logo: Buffer,
-  logoName: String
+  logoName: String,
+  isAdmin: {
+    type: Boolean,
+    default: false
+  }
 }, { collection: 'Profile' })
 
 const Profile = db.model('Profile', profileSchema);
