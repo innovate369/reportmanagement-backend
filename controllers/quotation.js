@@ -73,7 +73,7 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate('workId');
+    const quotationById = await Quotation.findById(id).populate('workId clientId');
 
     res.send({
       msg: "Successfully got Quotation data",
@@ -212,17 +212,17 @@ const quotationStatus = async (req, res) => {
     const { quotationStatus, id } = req.query;
     // const { rejectionReason } = req.body;
     if (quotationStatus === "approved") {
-      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "client", status: "approved" }, $unset: { rejectionReason: "" } }, {
+      const updateQuotation = await Quotation.findByIdAndUpdate({ _id: id }, { $set: { quotationStatus: "approved" } }, {
         runValidator: true,
         new: true
       })
       res.send({
-        msg: "Lead approved!",
-        data: updateLead,
+        msg: "Quotation approved!",
+        data: updateQuotation,
         status: 200
       });
     } else {
-      const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
+      const updaupdateQuotationteLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
         runValidator: true,
         new: true
       })

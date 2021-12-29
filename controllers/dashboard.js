@@ -1,6 +1,7 @@
 const Clients = require("../models/clients");
 const Users = require("../models/users");
 const projects = require("../models/projects");
+const Quotation = require("../models/quotation");
 
 const recordCount = async (req, res) => {
    const countArray = [];
@@ -11,7 +12,19 @@ const recordCount = async (req, res) => {
         countArray.push(userNum)
         const projectNum = await projects.countDocuments();
         countArray.push(projectNum)
-        res.send({ msg: 'counts got successfully', data: { totalClients: countArray[0], totalUsers: countArray[1], totalProjects: countArray[2] }, status: 200 })
+        const pendingQuotations = await Quotation.countDocuments({ QuotationStatus: "pending" });
+        countArray.push(pendingQuotations)
+        const approvedQuotations = await Quotation.countDocuments({ QuotationStatus: "approved" });
+        countArray.push(approvedQuotations)
+        res.send({ msg: 'counts got successfully', 
+                data:
+                 { 
+                     totalClients: countArray[0],
+                     totalUsers: countArray[1], 
+                     totalProjects: countArray[2],
+                     pendingQuotations: countArray[2],
+                     approvedQuotations: countArray[3]
+                 }, status: 200 })
     } catch (error) {
         res.send(error)
     }
