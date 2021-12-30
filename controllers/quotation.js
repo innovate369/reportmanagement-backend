@@ -117,15 +117,17 @@ const addQuotation = async (req, res) => {
       projectName
     } = req.body;
 
-    // const isoDate = quotationDate.toIso8601String();
-    // console.log(isoDate)
     if (quotationCount > 0) {
         
       const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
       const previousYear = lastQuotation[0].quotationDate.getFullYear();
+       
       const lastYear = parseInt(previousYear)
-      const thisYear = quotationDate.slice(0, 4);
-      const currentYear = parseInt(thisYear)
+     const isoDate = new Date(quotationDate).toISOString()
+    
+      const thisYear = isoDate.slice(0, 4);
+      const currentYear = parseInt(thisYear);
+    
             if (currentYear > lastYear) {
               invoiceNum = 1;
             } else {
