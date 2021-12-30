@@ -16,4 +16,8 @@ const router = require('./routes/index');
 
 app.use('/api', router);
 
+app.get("/app", (req, res)=> {
+    res.send("backend app started")
+})
+
 app.listen(3001, () => console.log('Server running on port 3001!'));

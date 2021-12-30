@@ -93,12 +93,14 @@ const addQuotation = async (req, res) => {
   try {
     // const todayDate = new Date();
     // const currentYear = todayDate.getFullYear();
-    const quotationCount = await Quotation.countDocuments(); 
-    const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
-    const previousYear = lastQuotation[0].quotationDate.getFullYear();
-
     let invoiceNum;
+    const quotationCount = await Quotation.countDocuments(); 
 
+    if (quotationCount == 0) {
+      invoiceNum = 1;
+     
+    } 
+    
     const {
       clientId,
       invoiceBy,
@@ -115,21 +117,21 @@ const addQuotation = async (req, res) => {
       projectName
     } = req.body;
 
-    const thisYear = quotationDate.slice(0, 4);
-    const currentYear = parseInt(thisYear)
-    console.log(currentYear)
-    const lastYear = parseInt(previousYear)
-    console.log(lastYear)
-    if (quotationCount == 0) {
-      invoiceNum = 1;
-     
-    } else if (currentYear > lastYear) {
-      invoiceNum = 1;
-  
-    } else {
-      invoiceNum = lastQuotation[0].invoiceNum + 1;
-    
-    }
+    // const isoDate = quotationDate.toIso8601String();
+    // console.log(isoDate)
+    if (quotationCount > 0) {
+        
+      const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
+      const previousYear = lastQuotation[0].quotationDate.getFullYear();
+      const lastYear = parseInt(previousYear)
+      const thisYear = quotationDate.slice(0, 4);
+      const currentYear = parseInt(thisYear)
+            if (currentYear > lastYear) {
+              invoiceNum = 1;
+            } else {
+              invoiceNum = lastQuotation[0].invoiceNum + 1;
+            }
+      }
 
     const newQuotation = {
       clientId,
