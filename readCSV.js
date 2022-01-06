@@ -1,3 +1,4 @@
+/* eslint-disable semi */
 // const csvparser = require("csv-parser")
 const csvtojson = require('csvtojson');
 const fs = require('fs');

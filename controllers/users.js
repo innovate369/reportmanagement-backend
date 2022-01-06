@@ -1,10 +1,3 @@
-/* eslint-disable no-unused-vars */
-/* eslint-disable prefer-const */
-/* eslint-disable comma-dangle */
-/* eslint-disable semi */
-/* eslint-disable quotes */
-/* eslint-disable spaced-comment */
-//const { upload } = require("../middleware/upload");
 const Users = require("../models/users");
 const Projects = require("../models/projects");
 const bcrypt = require("bcrypt");
@@ -25,8 +18,8 @@ const getAllUsers = async (req, res) => {
         { email: { $regex: search, $options: "i" } },
         { userName: { $regex: search, $options: "i" } },
         { userType: { $regex: search, $options: "i" } },
-        { phoneNumber: { $regex: search, $options: "i" } },
-      ],
+        { phoneNumber: { $regex: search, $options: "i" } }
+      ]
     })
       .populate("projectId")
       .select("-password")
@@ -37,7 +30,7 @@ const getAllUsers = async (req, res) => {
     res.send({
       msg: "Successfully got all Users!",
       data: { result, totalCount },
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
@@ -51,7 +44,7 @@ const getUserById = async (req, res) => {
     res.send({
       msg: "Successfully got user data",
       data: userById,
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
@@ -60,7 +53,7 @@ const getUserById = async (req, res) => {
 
 const addUser = async (req, res) => {
   const { userType, email, userName, phoneNumber } = req.body;
-  let newUser = { userType, email, userName, phoneNumber };
+  const newUser = { userType, email, userName, phoneNumber };
   const addUser = await Users.create(newUser);
   res.send({ msg: "New user added successfully!", data: addUser, status: 200 });
 };
@@ -71,13 +64,11 @@ const regUser = async (req, res) => {
 
   const regUser = new Users({
     userType: req.body.userType,
-    email: req.body.userType,
+    email: req.body.email,
     password: hashedPwd,
     userName: req.body.userName,
     phoneNumber: req.body.phoneNumber,
-    address: req.body.address,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
+    address: req.body.address
   });
 
   const token = await regUser.generateAuthToken();
@@ -88,7 +79,6 @@ const regUser = async (req, res) => {
   })
 
   const registered = await regUser.save();
-  // const insertResult = await Users.create(regUser);
 
   res.send({ msg: registered, status: 200 });
 };
@@ -96,7 +86,7 @@ const regUser = async (req, res) => {
 const userLogin = async (req, res) => {
   try {
     const user = await Users.findOne({
-      $or: [{ userName: req.body.userName }, { email: req.body.email }],
+      $or: [{ userName: req.body.userName }, { email: req.body.email }]
     });
 
     if (user) {
@@ -105,16 +95,16 @@ const userLogin = async (req, res) => {
       if (cmp) {
         const token = await user.generateAuthToken();
         res.cookie("loginCookie", token, {
-          expires: new Date(Date.now() + 300000),
-          httpOnly: true,
+          expires: new Date(Date.now() + 30000),
+          httpOnly: true
           // secure: true
         })
         await user.save()
-        const projectList = await Projects.find({});
+        //const userDetails = await Users.find({});
         res.send({
           msg: "Authentication Successful",
-          data: projectList,
-          status: 200,
+          data: user,
+          status: 200
         });
       } else {
         res.send({ msg: "Wrong username or password." });
@@ -129,7 +119,7 @@ const updateUser = async (req, res) => {
   const { id } = req.params;
   const updateById = await Users.findByIdAndUpdate(id, req.body, {
     runValidator: true,
-    new: true,
+    new: true
   });
   res.send({ msg: "User updated succesfully!", data: updateById, status: 200 });
 };
@@ -141,7 +131,7 @@ const deleteUser = async (req, res) => {
     res.send({
       msg: "User deleted successfully!",
       data: deleteById,
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });

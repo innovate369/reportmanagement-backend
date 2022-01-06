@@ -4,16 +4,20 @@
   "description": "��#\u0000 \u0000b\u0000a\u0000c\u0000k\u0000e\u0000n\u0000d\u0000-\u0000n\u0000o\u0000d\u0000e\u0000j\u0000s\u0000\r\u0000 \u0000",
   "main": "app.js",
   "dependencies": {
+    "@sendgrid/mail": "^7.6.0",
+    "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
-    "eslint": "^7.32.0",
-    "eslint-config-standard": "^16.0.3",
-    "eslint-plugin-import": "^2.25.3",
-    "eslint-plugin-promise": "^5.1.1",
-    "eslint-plugin-node": "^11.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.2",
+    "express-validator": "^6.14.0",
     "git": "^0.1.5",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.1.4",
+    "mongoose-aggregate-paginate-v2": "^1.0.6",
+    "mongoose-sequence": "^5.3.1",
+    "multer": "^1.4.4"
   },
-  "devDependencies": {},
   "scripts": {
     "start": "node app.js"
   },

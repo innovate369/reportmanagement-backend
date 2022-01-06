@@ -1,5 +1,4 @@
 const express = require("express");
-
 const router = express.Router();
 const checkWhiteList = require("../middleware/check");
 
@@ -7,9 +6,8 @@ const {
   getAllInvoices,
   addInvoice,
   deleteInvoice,
-  addWork,
+  addWork
 } = require("../controllers/invoice");
-// const { checkAddQuotation, validate } = require("../middleware/fieldValidator");
 
 router.get("/", checkWhiteList, getAllInvoices);
 router.post("/add", addInvoice);

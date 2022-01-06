@@ -8,4 +8,4 @@ const checkWhiteList = (req, res, next) => {
   }
 }
 
-module.exports = checkWhiteList
+module.exports = checkWhiteList;

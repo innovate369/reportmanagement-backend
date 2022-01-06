@@ -1,6 +1,6 @@
 /* eslint-disable semi */
 /* eslint-disable quotes */
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 const Users = require("../models/users");
 
 const auth = async (req, res, next) => {
@@ -19,4 +19,4 @@ const auth = async (req, res, next) => {
   }
 }
 
-module.exports = auth
+module.exports = auth;

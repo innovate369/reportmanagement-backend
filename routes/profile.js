@@ -1,9 +1,5 @@
-/* eslint-disable semi */
-/* eslint-disable quotes */
-const express = require('express')
-
-const router = express.Router()
-// const checkWhiteList = require('../middleware/check')
+const express = require('express');
+const router = express.Router();
 
 const {
   getProfile,
@@ -11,12 +7,12 @@ const {
   deleteProfile,
   addProfile
 } = require('../controllers/profile')
-// const { checkAddClient, validate } = require('../middleware/fieldValidator')
+
 const { fileStore } = require("../middleware/upload");
 
-router.get('/:id', getProfile)
+router.get('/', getProfile)
 router.post('/add', fileStore.fields([{ name: 'logo', maxCount: 1 }]), addProfile)
 router.delete('/delete/:id', deleteProfile)
 router.put('/edit/:id', updateProfile)
 
-module.exports = router
+module.exports = router;

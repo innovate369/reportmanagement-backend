@@ -1,7 +1,4 @@
-/* eslint-disable semi */
-/* eslint-disable quotes */
 const express = require("express");
-
 const router = express.Router();
 const checkWhiteList = require("../middleware/check");
 
@@ -12,17 +9,19 @@ const {
   getAllQuotations,
   updateProject,
   getQuotationById,
-  editQuotation
+  editQuotation,
+  quotationStatus
 } = require("../controllers/quotation");
-// const { checkAddQuotation, validate } = require("../middleware/fieldValidator");
+
+// const { validate, checkAddQuotation } = require("../middleware/fieldValidator")
 
 router.get("/", checkWhiteList, getAllQuotations);
 router.get("/quotationsByClient", checkWhiteList, getQuotation);
 router.get("/:id", checkWhiteList, getQuotationById);
 router.post("/add", addQuotation);
-// router.put('/addTask', addTask)
 router.put("/update/:id", updateProject);
 router.put("/edit/:id", editQuotation);
 router.delete("/delete/:id", deleteQuotation);
+router.put('/quotationStatus', quotationStatus)
 
 module.exports = router;

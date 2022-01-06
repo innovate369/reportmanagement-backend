@@ -12,47 +12,47 @@ const getAllInvoices = async (req, res) => {
 
 const addWork = async (req, res) => {
   try {
-    const { clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost } = req.body
+    const {
+      clientId,
+      workDescription,
+      deliveryDate,
+      withExtra,
+      developmentTime,
+      developmentCost
+    } = req.body
     const newWork = {
-      clientId, workDescription, deliveryDate, withExtra, developmentTime, developmentCost
+      clientId,
+      workDescription,
+      deliveryDate,
+      withExtra,
+      developmentTime,
+      developmentCost
     }
-    const workDetails = await Works.create(newWork)
-    // const obj = JSON.parse(JSON.stringify(workDetails))
-
-    // obj["task"].push({
-    //     workDescription: workDescription, deliveryDate: deliveryDate, withExtra: withExtra, developmentTime: developmentTime,
-    //     developmentCost: developmentCost
-    // });
-
-    // const pushDetails = await Works.findByIdAndUpdate(workDetails._id, {$push : { "task":
-    //    { "workDescription": workDescription, deliveryDate: deliveryDate, withExtra: withExtra, developmentTime: developmentTime,
-    //     developmentCost: developmentCost}
-    // }})
-
-    res.send({ msg: 'Work added successfully!', data: workDetails, status: 200 })
+    const workDetails = await Works.create(newWork);
+    res.send({ msg: 'Work added successfully!', data: workDetails, status: 200 });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
 }
 
 const addInvoice = async (req, res) => {
   try {
-    const { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate, clientId } = req.body
+    const { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate, clientId } = req.body;
     const newInvoiceData = { projectName, city, gstNum, mobileNum, invoiceNum, invoiceDate, clientId }
-    const newInvoice = await Invoice.create(newInvoiceData)
-    res.send({ msg: 'Invoice created successfully!', data: newInvoice, status: 200 })
+    const newInvoice = await Invoice.create(newInvoiceData);
+    res.send({ msg: 'Invoice created successfully!', data: newInvoice, status: 200 });
   } catch (error) {
-    res.send({ msg: error.message, status: 400 })
+    res.send({ msg: error.message, status: 400 });
   }
 }
 
 const deleteInvoice = async (req, res) => {
   try {
-    const { id } = req.params
-    const deleteById = await Invoice.findByIdAndDelete(id)
-    res.send({ msg: 'Invoice deleted successfully!', data: deleteById, status: 200 })
+    const { id } = req.params;
+    const deleteById = await Invoice.findByIdAndDelete(id);
+    res.send({ msg: 'Invoice deleted successfully!', data: deleteById, status: 200 });
   } catch (e) {
-    res.send({ msg: e.message, status: 400 })
+    res.send({ msg: e.message, status: 400 });
   }
 }
 
@@ -61,4 +61,4 @@ module.exports = {
   addInvoice,
   deleteInvoice,
   addWork
-}
+} 

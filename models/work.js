@@ -1,5 +1,3 @@
-/* eslint-disable semi */
-/* eslint-disable quotes */
 const mongoose = require("mongoose");
 const db = require("../config/db");
 
@@ -8,7 +6,6 @@ const { Schema } = mongoose;
 const workSchema = new Schema(
   {
     clientId: { type: mongoose.Schema.Types.ObjectId, ref: "Clients" },
-    //  task: [{
     workDescription: String,
     developmentTime: String,
     developmentCost: Number,
@@ -18,7 +15,6 @@ const workSchema = new Schema(
       type: Boolean,
       default: true
     }
-    // }]
   },
   { collection: "Works" }
 );

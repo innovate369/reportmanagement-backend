@@ -1,29 +1,11 @@
-/* eslint-disable padded-blocks */
-/* eslint-disable no-trailing-spaces */
-/* eslint-disable comma-dangle */
-/* eslint-disable semi */
-/* eslint-disable quotes */
-/* eslint-disable no-unused-vars */
 const Clients = require("../models/clients");
-const { update } = require("../models/quotation");
 const Quotation = require("../models/quotation");
 const Projects = require("../models/projects");
 const Works = require('../models/work');
+const sgMail = require('@sendgrid/mail');
+const API_KEY = process.env.API_KEY;
 
-// eslint-disable-next-line no-multi-spaces
-// const getAllQuotations = async (req, res) => {
-//   // add search functionality
-//   try {
-//     const result = await Quotation.find({}).populate("clientId");
-//     res.send({
-//       msg: "Got all Quotations successfully!",
-//       data: result,
-//       status: 200,
-//     });
-//   } catch (e) {
-//     res.send({ msg: e.message, status: 400 });
-//   }
-// };
+sgMail.setApiKey(API_KEY);
 
 const getAllQuotations = async (req, res) => {
   try {
@@ -32,13 +14,14 @@ const getAllQuotations = async (req, res) => {
     const skip = (page - 1) * size;
 
     const totalResults = await Quotation.find({
-      $or: [{ invoiceBy: { $regex: search, $options: "i" } }],
+      $or: [{ invoiceBy: { $regex: search, $options: "i" } }]
     });
 
     const result = await Quotation.find({
-      $or: [{ invoiceBy: { $regex: search, $options: "i" } }],
+      $or: [{ invoiceBy: { $regex: search, $options: "i" } }]
     })
       .populate("clientId")
+      .sort({ createdOn: -1 })
       .limit(limit)
       .skip(skip);
 
@@ -47,7 +30,7 @@ const getAllQuotations = async (req, res) => {
     res.send({
       msg: "Got all Quotations successfully!",
       data: { result, totalCount },
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
@@ -56,8 +39,8 @@ const getAllQuotations = async (req, res) => {
 const getQuotation = async (req, res) => {
   try {
     const { clientId } = req.query;
-    const quotation = await Quotation.findOne({ clientId }).populate(
-      "clientId workId projectId"
+    const quotation = await Quotation.findOne({ clientId: clientId }).populate(
+      "workId projectId"
     );
     console.log(quotation.workId.length);
 
@@ -70,6 +53,7 @@ const getQuotation = async (req, res) => {
     const iGST = 0.18 * subCost;
     const cGST = 0.09 * subCost;
     const sGST = 0.09 * subCost;
+    const tds = 0.10 * subCost;
 
     const withGSTAmount = subCost + 0.18 * subCost;
     const withoutGSTAmount = subCost;
@@ -84,10 +68,10 @@ const getQuotation = async (req, res) => {
         iGST,
         cGST,
         sGST,
+        tds
       },
-      status: 200,
+      status: 200
     });
-    // res.send({ msg: 'Quotation got successfully!', data: quotation, status: 200 })
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
   }
@@ -96,19 +80,12 @@ const getQuotation = async (req, res) => {
 const getQuotationById = async (req, res) => {
   try {
     const { id } = req.params;
-    const quotationById = await Quotation.findById(id).populate({ 
-      path: 'projectId',
-      populate: {
-        path: 'workId',
-        model: "Works",
-      }
-    } 
-    );
+    const quotationById = await Quotation.findById(id).populate('workId clientId');
 
     res.send({
       msg: "Successfully got Quotation data",
       data: { quotationById },
-      status: 200,
+      status: 200
     });
 
   } catch (e) {
@@ -117,89 +94,99 @@ const getQuotationById = async (req, res) => {
 };
 
 const addQuotation = async (req, res) => {
-  const {
-    clientId,
-    invoiceBy,
-    invoiceType,
-    quotationDate,
-    workId,
-    cGST,
-    sGST,
-    iGST,
-    invoiceAmount,
-    subCost,
-    projectId
-  } = req.body;
-  const newQuotation = {
-    clientId,
-    invoiceBy,
-    invoiceType,
-    quotationDate,
-    cGST,
-    sGST,
-    iGST,
-    invoiceAmount,
-    subCost,
-    workId,
-    projectId,
-    invoiceNum: Math.random().toString(36).slice(2)
-  };
-  const addNewQuotation = await Quotation.create(newQuotation);
+  try {
+    
+    let invoiceNum;
+    const quotationCount = await Quotation.countDocuments(); 
 
-  const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
-    $addToSet: { workId: workId },
-  });
+    if (quotationCount == 0) {
+      invoiceNum = 1;
+     
+    } 
+    
+    const {
+      clientId,
+      invoiceBy,
+      invoiceType,
+      quotationDate,
+      workId,
+      cGST,
+      sGST,
+      iGST,
+      tds,
+      invoiceAmount,
+      subCost,
+      projectId,
+      projectName
+    } = req.body;
 
-  const updateWork = await Works.updateMany(
-    { _id: { $in: workId } },
-    { $set: { isNewWork: false } },
-    { multi: true }
-  )
+    if (quotationCount > 0) {
+        
+      const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
+      const previousYear = lastQuotation[0].quotationDate.getFullYear();
+       
+      const lastYear = parseInt(previousYear)
+     const isoDate = new Date(quotationDate).toISOString()
+    
+      const thisYear = isoDate.slice(0, 4);
+      const currentYear = parseInt(thisYear);
+    
+            if (currentYear > lastYear) {
+              invoiceNum = 1;
+            } else {
+              invoiceNum = lastQuotation[0].invoiceNum + 1;
+            }
+      }
 
-  // const addWorkToClientWorkId = await Clients.findByIdAndUpdate(clientId, { $push: { workId: workId, 'projectId.workId': workId } })
-
-  // const pushDetails = await Quotation.findByIdAndUpdate(addNewQuotation._id, { $push: { workId: workId } })
-  // const updatedQuotaion = await Quotation.findById(addNewQuotation._id)
-  // let subCost = 0
-  // for (let i = 0; i < updatedQuotaion.workId.length; i++) {
-  //   const projectCost = await updatedQuotaion.workId[i].developmentCost
-  //   subCost += projectCost
-  // }
-
-  // const iGST = 0
-  // const cGST = 9
-  // const sGST = 9
-
-  // const withGSTAmount = subCost + (0.18 * subCost)
-  // const withoutGSTAmount = subCost
-
-  // const readyQuotation = await Quotation.findByIdAndUpdate(updatedQuotaion._id, {
-  //   $push: {
-  //     iGST,
-  //     cGST,
-  //     sGST,
-  //     withGSTAmount,
-  //     withoutGSTAmount
-  //   }
-  // })
-
-  res.send({
-    msg: "Quotation added successfully!",
-    data: addNewQuotation,
-    status: 200,
-  });
-};
-
+    const newQuotation = {
+      clientId,
+      invoiceBy,
+      invoiceType,
+      quotationDate,
+      cGST,
+      sGST,
+      iGST,
+      tds,
+      invoiceAmount,
+      subCost,
+      workId,
+      projectId,
+      invoiceNum,
+      projectName
+    };
+    const addNewQuotation = await Quotation.create(newQuotation);
+  
+    const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
+      $addToSet: { workId: workId }
+    });
+  
+    const updateWork = await Works.updateMany(
+      { _id: { $in: workId } },
+      { $set: { isNewWork: false } },
+      { multi: true }
+    )
+  
+    res.send({
+      msg: "Quotation added successfully!",
+      data: addNewQuotation,
+      status: 200
+    });
+    
+  } catch (error) {
+    res.send({ msg: error.message, status: 400 });
+  }
+}
+  
 const editQuotation = async (req, res) => {
   const { id } = req.params;
   const updateById = await Quotation.findByIdAndUpdate(id, req.body, {
     runValidator: true,
-    new: true,
+    new: true
   });
   res.send({
     msg: "Quotation updated successfully!",
     data: updateById,
-    status: 200,
+    status: 200
   });
 };
 
@@ -213,8 +200,8 @@ const updateProject = async (req, res) => {
         $set: {
           "workId.$.developmentCost": developmentCost,
           "workId.$.developmentTime": developmentTime,
-          "workId.$.deliveryDate": deliveryDate,
-        },
+          "workId.$.deliveryDate": deliveryDate
+        }
       }
     );
     res.send({ msg: "Project updated successfully!", status: 200 });
@@ -230,12 +217,88 @@ const deleteQuotation = async (req, res) => {
     res.send({
       msg: "Quotation deleted successfully!",
       data: deleteById,
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
   }
 };
+
+const quotationStatus = async (req, res) => {
+  try {
+ 
+    const { quotationStatus, id } = req.query;
+    if (quotationStatus === "approved") {
+      const updateQuotation = await Quotation.findByIdAndUpdate({ _id: id }, { $set: { quotationStatus: "approved" } }, {
+        runValidator: true,
+        new: true
+      })
+      const clientId = updateQuotation.clientId;
+
+      const quotationClient = await Clients.findOne({_id : clientId});
+
+      const clientEmail = quotationClient.email;
+
+      const emailMessage = {
+        to: clientEmail,
+        from: {
+          name: 'Innovate 369',
+          email: 'milankumarpatel1992@gmail.com'
+        },
+        subject: 'Quotation Status',
+        text: 'Your quotation was approved',
+        html: '<h1>Your Quotation Status: APPROVED</h1>',
+      };
+
+      sgMail
+      .send(emailMessage)
+      .then((response) => console.log('Email sent...'))
+      .catch((error) => console.log(error.message));
+      res.send({
+        msg: "Quotation approved!",
+        data: updateQuotation,
+        status: 200
+      });
+    } else {
+      const updateQuotation = await Quotation.findByIdAndUpdate({ _id: id }, { $set: { quotationStatus: "rejected" } }, {
+        runValidator: true,
+        new: true
+      })
+
+      const clientId = updateQuotation.clientId;
+
+      const quotationClient = await Clients.findOne({_id : clientId});
+
+      const clientEmail = quotationClient.email;
+
+      const emailMessage = {
+        to: clientEmail,
+        from: {
+          name: 'Innovate 369',
+          email: 'milankumarpatel1992@gmail.com'
+        },
+        subject: 'Quotation Status',
+        text: 'Your quotation was rejected',
+        html: '<h1>Your Quotation Status: REJECTED</h1>',
+      };
+
+      sgMail
+      .send(emailMessage)
+      .then((response) => console.log('Email sent...'))
+      .catch((error) => console.log(error.message));
+      res.send({
+        msg: "Quotation rejected!",
+        data: updateQuotation,
+        status: 200
+      });
+    }
+  } catch (error) {
+    res.send({
+      msg: error.msg,
+      status: 400
+    })
+  }
+}
 
 module.exports = {
   getAllQuotations,
@@ -245,4 +308,5 @@ module.exports = {
   updateProject,
   getQuotationById,
   editQuotation,
-};
+  quotationStatus
+}

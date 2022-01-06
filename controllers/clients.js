@@ -1,6 +1,3 @@
-/* eslint-disable comma-dangle */
-/* eslint-disable quotes */
-/* eslint-disable semi */
 const Clients = require("../models/clients");
 
 const getAllClients = async (req, res) => {
@@ -18,18 +15,18 @@ const getAllClients = async (req, res) => {
           { ledgerName: { $regex: search, $options: "i" } },
           { ownerName: { $regex: search, $options: "i" } },
           { contactPerson: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-        ],
+          { email: { $regex: search, $options: "i" } }
+        ]
       })
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
-      const totalLeads = await Clients.find({ type: type })
+      const totalLeads = await Clients.find({ type: type });
       const totalCount = totalLeads.length;
       res.send({
         msg: "Got all leads succuessfully!",
         data: { result, totalCount },
-        status: 200,
+        status: 200
       });
     } else {
       const result = await Clients.find({
@@ -40,18 +37,18 @@ const getAllClients = async (req, res) => {
           { ledgerName: { $regex: search, $options: "i" } },
           { ownerName: { $regex: search, $options: "i" } },
           { contactPerson: { $regex: search, $options: "i" } },
-          { email: { $regex: search, $options: "i" } },
-        ],
+          { email: { $regex: search, $options: "i" } }
+        ]
       })
         .limit(limit)
         .skip(skip)
         .sort("createdOn");
-      const totalClients = await Clients.find({ type: { $ne: "lead" } })
+      const totalClients = await Clients.find({ type: { $ne: "lead" } });
       const totalCount = totalClients.length;
       res.send({
         msg: "Got all Clients succuessfully!",
         data: { result, totalCount },
-        status: 200,
+        status: 200
       });
     }
   } catch (e) {
@@ -61,11 +58,11 @@ const getAllClients = async (req, res) => {
 
 const clientData = async (req, res) => {
   try {
-    const clients = await Clients.find().populate("projects");
+    const clients = await Clients.find().populate("projectName");
     res.send({
       msg: "Got all Clients succuessfully!",
       data: clients,
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
@@ -75,11 +72,11 @@ const clientData = async (req, res) => {
 const getClientById = async (req, res) => {
   try {
     const { id } = req.params;
-    const clientById = await Clients.findById(id).populate("projects");
+    const clientById = await Clients.findById(id).populate("projectName");
     res.send({
       msg: "Successfully got client data",
       data: clientById,
-      status: 200,
+      status: 200
     });
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
@@ -131,7 +128,7 @@ const addClient = async (req, res) => {
   res.send({
     msg: "New client/lead is added succesfully!",
     data: addNewClient,
-    status: 200,
+    status: 200
   });
 };
 
@@ -142,19 +139,8 @@ const deleteClient = async (req, res) => {
     res.send({
       msg: "Client data deleted successfully!",
       data: deleteById,
-      status: 200,
+      status: 200
     });
-  } catch (e) {
-    res.send({ msg: e.message, status: 400 });
-  }
-};
-
-const clientInvoice = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const project = await Clients.findById(id).populate("projectId workId");
-
-    res.send(project.projectId, project.workId);
   } catch (e) {
     res.send({ msg: e.message, status: 400 });
   }
@@ -163,16 +149,16 @@ const clientInvoice = async (req, res) => {
 const bindProject = async (req, res) => {
   try {
     const { clientId } = req.query;
-    const { newProjectId } = req.body;
+    const { newProjectName } = req.body;
     const bindingClient = await Clients.findByIdAndUpdate(
       clientId,
-      { projectId: newProjectId },
+      { projectName: newProjectName },
       { runValidator: true, new: true }
     );
     res.send({
       msg: "Client linked with new project!",
       data: bindingClient,
-      status: 200,
+      status: 200
     });
   } catch (error) {
     res.send({ msg: error.message, status: 400 });
@@ -182,12 +168,12 @@ const updateClient = async (req, res) => {
   const { id } = req.params;
   const updateById = await Clients.findByIdAndUpdate(id, req.body, {
     runValidator: true,
-    new: true,
+    new: true
   });
   res.send({
     msg: "Clients data updated successfully!",
     data: updateById,
-    status: 200,
+    status: 200
   });
 };
 
@@ -198,28 +184,28 @@ const leadStatus = async (req, res) => {
     if (accepted === "true") {
       const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "client", status: "approved" }, $unset: { rejectionReason: "" } }, {
         runValidator: true,
-        new: true,
+        new: true
       })
       res.send({
         msg: "Lead approved!",
         data: updateLead,
-        status: 200,
+        status: 200
       });
     } else {
       const updateLead = await Clients.findByIdAndUpdate({ _id: id }, { $set: { type: "lead", status: "rejected", rejectionReason: rejectionReason } }, {
         runValidator: true,
-        new: true,
+        new: true
       })
       res.send({
         msg: "Lead rejected!",
         data: updateLead,
-        status: 200,
+        status: 200
       });
     }
   } catch (error) {
     res.send({
       msg: error.msg,
-      status: 400,
+      status: 400
     })
   }
 }
@@ -228,7 +214,6 @@ module.exports = {
   getAllClients,
   addClient,
   deleteClient,
-  clientInvoice,
   bindProject,
   getClientById,
   clientData,
