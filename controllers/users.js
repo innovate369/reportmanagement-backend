@@ -95,19 +95,18 @@ const userLogin = async (req, res) => {
       if (cmp) {
         const token = await user.generateAuthToken();
         res.cookie("loginCookie", token, {
-          expires: new Date(Date.now() + 30000),
+          expires: new Date(Date.now() + 86400000),
           httpOnly: true
           // secure: true
         })
         await user.save()
-        //const userDetails = await Users.find({});
         res.send({
           msg: "Authentication Successful",
           data: user,
           status: 200
         });
       } else {
-        res.send({ msg: "Wrong username or password." });
+        res.send({ msg: "Wrong username or password.", status: 400 });
       }
     }
   } catch (error) {
