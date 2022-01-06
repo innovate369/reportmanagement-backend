@@ -20,7 +20,7 @@ const {
   validate
 } = require("../middleware/fieldValidator");
 
-router.get("/", getAllProjects);
+router.get("/", auth, getAllProjects);
 router.get("/:id", getProjectById);
 router.post("/add",fileStore.fields([{ name: "image", maxCount: 1 }, { name: "clientCSV", maxCount: 1 }]),
   checkAddProject,

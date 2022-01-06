@@ -95,15 +95,15 @@ const userLogin = async (req, res) => {
       if (cmp) {
         const token = await user.generateAuthToken();
         res.cookie("loginCookie", token, {
-          expires: new Date(Date.now() + 300000),
+          expires: new Date(Date.now() + 30000),
           httpOnly: true
           // secure: true
         })
         await user.save()
-        const projectList = await Projects.find({});
+        //const userDetails = await Users.find({});
         res.send({
           msg: "Authentication Successful",
-          data: projectList,
+          data: user,
           status: 200
         });
       } else {
