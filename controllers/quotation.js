@@ -2,6 +2,10 @@ const Clients = require("../models/clients");
 const Quotation = require("../models/quotation");
 const Projects = require("../models/projects");
 const Works = require('../models/work');
+const sgMail = require('@sendgrid/mail');
+const API_KEY = process.env.API_KEY;
+
+sgMail.setApiKey(API_KEY);
 
 const getAllQuotations = async (req, res) => {
   try {
@@ -91,8 +95,7 @@ const getQuotationById = async (req, res) => {
 
 const addQuotation = async (req, res) => {
   try {
-    // const todayDate = new Date();
-    // const currentYear = todayDate.getFullYear();
+    
     let invoiceNum;
     const quotationCount = await Quotation.countDocuments(); 
 
@@ -223,13 +226,34 @@ const deleteQuotation = async (req, res) => {
 
 const quotationStatus = async (req, res) => {
   try {
+ 
     const { quotationStatus, id } = req.query;
-    // const { rejectionReason } = req.body;
     if (quotationStatus === "approved") {
       const updateQuotation = await Quotation.findByIdAndUpdate({ _id: id }, { $set: { quotationStatus: "approved" } }, {
         runValidator: true,
         new: true
       })
+      const clientId = updateQuotation.clientId;
+
+      const quotationClient = await Clients.findOne({_id : clientId});
+
+      const clientEmail = quotationClient.email;
+
+      const emailMessage = {
+        to: clientEmail,
+        from: {
+          name: 'Innovate 369',
+          email: 'milankumarpatel1992@gmail.com'
+        },
+        subject: 'Quotation Status',
+        text: 'Your quotation was approved',
+        html: '<h1>Your Quotation Status: APPROVED</h1>',
+      };
+
+      sgMail
+      .send(emailMessage)
+      .then((response) => console.log('Email sent...'))
+      .catch((error) => console.log(error.message));
       res.send({
         msg: "Quotation approved!",
         data: updateQuotation,
@@ -240,6 +264,28 @@ const quotationStatus = async (req, res) => {
         runValidator: true,
         new: true
       })
+
+      const clientId = updateQuotation.clientId;
+
+      const quotationClient = await Clients.findOne({_id : clientId});
+
+      const clientEmail = quotationClient.email;
+
+      const emailMessage = {
+        to: clientEmail,
+        from: {
+          name: 'Innovate 369',
+          email: 'milankumarpatel1992@gmail.com'
+        },
+        subject: 'Quotation Status',
+        text: 'Your quotation was rejected',
+        html: '<h1>Your Quotation Status: REJECTED</h1>',
+      };
+
+      sgMail
+      .send(emailMessage)
+      .then((response) => console.log('Email sent...'))
+      .catch((error) => console.log(error.message));
       res.send({
         msg: "Quotation rejected!",
         data: updateQuotation,

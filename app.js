@@ -16,7 +16,7 @@ const router = require('./routes/index');
 
 app.use('/api', router);
 
-app.get("/app", (req, res)=> {
+app.get('/app', (req, res)=> {
     res.send("backend app started")
 })
 
