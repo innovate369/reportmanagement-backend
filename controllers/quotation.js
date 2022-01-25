@@ -120,23 +120,23 @@ const addQuotation = async (req, res) => {
       projectName
     } = req.body;
 
-    if (quotationCount > 0) {
+    // if (quotationCount > 0) {
         
-      const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
-      const previousYear = lastQuotation[0].quotationDate.getFullYear();
+    //   const lastQuotation = await Quotation.find().sort({ createdOn: -1 }).limit(1);
+    //   const previousYear = lastQuotation[0].quotationDate.getFullYear();
        
-      const lastYear = parseInt(previousYear)
-     const isoDate = new Date(quotationDate).toISOString()
+    //   const lastYear = parseInt(previousYear)
+    //  const isoDate = new Date(quotationDate).toISOString()
     
-      const thisYear = isoDate.slice(0, 4);
-      const currentYear = parseInt(thisYear);
+    //   const thisYear = isoDate.slice(0, 4);
+    //   const currentYear = parseInt(thisYear);
     
-            if (currentYear > lastYear) {
-              invoiceNum = 1;
-            } else {
-              invoiceNum = lastQuotation[0].invoiceNum + 1;
-            }
-      }
+    //         if (currentYear > lastYear) {
+    //           invoiceNum = 1;
+    //         } else {
+    //           invoiceNum = lastQuotation[0].invoiceNum + 1;
+    //         }
+    //   }
 
     const newQuotation = {
       clientId,
@@ -156,15 +156,15 @@ const addQuotation = async (req, res) => {
     };
     const addNewQuotation = await Quotation.create(newQuotation);
   
-    const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
-      $addToSet: { workId: workId }
-    });
+    // const addWorkToProject = await Projects.findByIdAndUpdate(projectId, {
+    //   $addToSet: { workId: workId }
+    // });
   
-    const updateWork = await Works.updateMany(
-      { _id: { $in: workId } },
-      { $set: { isNewWork: false } },
-      { multi: true }
-    )
+    // const updateWork = await Works.updateMany(
+    //   { _id: { $in: workId } },
+    //   { $set: { isNewWork: false } },
+    //   { multi: true }
+    // )
   
     res.send({
       msg: "Quotation added successfully!",
@@ -173,6 +173,7 @@ const addQuotation = async (req, res) => {
     });
     
   } catch (error) {
+    console.log(error);
     res.send({ msg: error.message, status: 400 });
   }
 }
